@@ -1,4 +1,4 @@
-import 'package:attendance_app/src/views/widgets/buttons/button_text_primary.dart';
+import 'package:attendance_app/src/views/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
@@ -13,22 +13,22 @@ class _LoginPageState extends State<LoginPage> {
     "id": "",
     "password": "",
   };
-  final formKey = GlobalKey<FormState>();
-  bool isPasswordVisible = false;
-  bool isLoading = false;
+  final _formKey = GlobalKey<FormState>();
+  bool _isPasswordVisible = false;
+  bool _isLoading = false;
 
   void toggleShowPassword() {
     setState(() {
-      isPasswordVisible = !isPasswordVisible;
+      _isPasswordVisible = !_isPasswordVisible;
     });
   }
 
   void login() {
-    if (formKey.currentState!.validate()) {
-      formKey.currentState?.save();
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState?.save();
       print(formData);
       setState(() {
-        isLoading = !isLoading;
+        _isLoading = !_isLoading;
       });
     }
   }
@@ -40,7 +40,7 @@ class _LoginPageState extends State<LoginPage> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Form(
-            key: formKey,
+            key: _formKey,
             child: Expanded(
               flex: 2,
               child: Padding(
@@ -58,7 +58,6 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       textAlign: TextAlign.center,
                     ),
-                    // Image(image: AssetImage("assets/images/logo.png")), // TODO: add uni logo
                     const SizedBox(height: 50),
                     TextFormField(
                       onSaved: (value) {
@@ -84,7 +83,7 @@ class _LoginPageState extends State<LoginPage> {
                       onSaved: (value) {
                         formData["password"] = value.toString();
                       },
-                      obscureText: !isPasswordVisible,
+                      obscureText: !_isPasswordVisible,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return "Please enter your id";
@@ -100,7 +99,7 @@ class _LoginPageState extends State<LoginPage> {
                         prefixIcon: const Icon(Icons.lock_outline),
                         suffixIcon: IconButton(
                           onPressed: toggleShowPassword,
-                          icon: isPasswordVisible
+                          icon: _isPasswordVisible
                               ? const Icon(Icons.visibility_off)
                               : const Icon(Icons.visibility),
                         ),
@@ -112,12 +111,14 @@ class _LoginPageState extends State<LoginPage> {
                     const SizedBox(height: 24),
                     Row(
                       mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        ButtonTextPrimary(
-                          text: "Log In",
-                          onPressed: login,
-                          isLoading: isLoading,
+                        Expanded(
+                          child: ButtonTextPrimary(
+                            text: "Log In",
+                            onPressed: login,
+                            isLoading: _isLoading,
+                          ),
                         )
                       ],
                     ),

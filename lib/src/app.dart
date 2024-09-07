@@ -1,4 +1,3 @@
-
 import 'package:attendance_app/src/views/screens/screens.dart';
 import 'package:flutter/material.dart';
 
