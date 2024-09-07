@@ -1,3 +1,5 @@
+import 'package:attendance_app/src/models/api_response.dart';
+import 'package:attendance_app/src/services/api/api.dart';
 import 'package:attendance_app/src/views/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
@@ -10,12 +12,13 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   Map<String, String> formData = {
-    "id": "",
+    "auid": "",
     "password": "",
   };
   final _formKey = GlobalKey<FormState>();
   bool _isPasswordVisible = false;
   bool _isLoading = false;
+  String _responseError = "";
 
   void toggleShowPassword() {
     setState(() {
@@ -23,12 +26,29 @@ class _LoginPageState extends State<LoginPage> {
     });
   }
 
-  void login() {
-    if (_formKey.currentState!.validate()) {
+  void _handleLogin() async {
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
+    try {
+      setState(() {
+        _isLoading = true;
+        _responseError = "";
+      });
       _formKey.currentState?.save();
       print(formData);
+      ApiResponse response = await Api().user.login(formData);
+      print(response.data.user.name);
+      //   store it in provider
+      //   navigate to next page according to role
+    } catch (error) {
       setState(() {
-        _isLoading = !_isLoading;
+        _responseError = "$error";
+        print(_responseError);
+      });
+    } finally {
+      setState(() {
+        _isLoading = false;
       });
     }
   }
@@ -58,10 +78,10 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       textAlign: TextAlign.center,
                     ),
-                    const SizedBox(height: 50),
+                    const SizedBox(height: 40),
                     TextFormField(
                       onSaved: (value) {
-                        formData["id"] = value.toString();
+                        formData["auid"] = value.toString();
                       },
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -108,7 +128,10 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 24),
+                    SizedBox(
+                      height: 44,
+                      child: Text(_responseError),
+                    ),
                     Row(
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -116,7 +139,7 @@ class _LoginPageState extends State<LoginPage> {
                         Expanded(
                           child: ButtonTextPrimary(
                             text: "Log In",
-                            onPressed: login,
+                            onPressed: _handleLogin,
                             isLoading: _isLoading,
                           ),
                         )
