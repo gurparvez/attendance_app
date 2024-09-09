@@ -1,7 +1,10 @@
 import 'package:attendance_app/src/models/api_response.dart';
+import 'package:attendance_app/src/models/user.model.dart';
+import 'package:go_router/go_router.dart';
 import 'package:attendance_app/src/services/api/api.dart';
 import 'package:attendance_app/src/views/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -20,6 +23,15 @@ class _LoginPageState extends State<LoginPage> {
   bool _isLoading = false;
   String _responseError = "";
 
+  OutlineInputBorder border = OutlineInputBorder(
+    borderRadius: BorderRadius.circular(8),
+  );
+
+  final OutlineInputBorder borderRed = OutlineInputBorder(
+    borderSide: const BorderSide(color: Colors.red, width: 2.0),
+    borderRadius: BorderRadius.circular(8),
+  );
+
   void toggleShowPassword() {
     setState(() {
       _isPasswordVisible = !_isPasswordVisible;
@@ -36,15 +48,25 @@ class _LoginPageState extends State<LoginPage> {
         _responseError = "";
       });
       _formKey.currentState?.save();
-      print(formData);
-      ApiResponse response = await Api().user.login(formData);
-      print(response.data.user.name);
-      //   store it in provider
-      //   navigate to next page according to role
+      debugPrint("$formData");
+      ApiResponse<UserModel> response = await Api().user.login(formData);
+      debugPrint(response.data.user!.name);
+
+      if(response.success) {
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString("token", response.data.accessToken!);
+
+        final role = response.data.user!.role;
+        if(role == "student") {
+          context.go("/");
+        } else if(role == "teacher") {
+          context.go("/teacher");
+        }
+      }
     } catch (error) {
       setState(() {
         _responseError = "$error";
-        print(_responseError);
+        debugPrint(_responseError);
       });
     } finally {
       setState(() {
@@ -74,7 +96,7 @@ class _LoginPageState extends State<LoginPage> {
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
-                        color: Colors.indigo[900],
+                        color: Theme.of(context).colorScheme.primary,
                       ),
                       textAlign: TextAlign.center,
                     ),
@@ -93,9 +115,12 @@ class _LoginPageState extends State<LoginPage> {
                         labelText: 'User ID',
                         hintText: 'Enter User ID',
                         prefixIcon: const Icon(Icons.person_outline),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
+                        border: border,
+                        enabledBorder:
+                            _responseError != "" ? borderRed : border,
+                        // Normal border
+                        focusedBorder:
+                            _responseError != "" ? borderRed : border,
                       ),
                     ),
                     const SizedBox(height: 16),
@@ -123,9 +148,12 @@ class _LoginPageState extends State<LoginPage> {
                               ? const Icon(Icons.visibility_off)
                               : const Icon(Icons.visibility),
                         ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
+                        border: border,
+                        enabledBorder:
+                            _responseError != "" ? borderRed : border,
+                        // Normal border
+                        focusedBorder:
+                            _responseError != "" ? borderRed : border,
                       ),
                     ),
                     SizedBox(

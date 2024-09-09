@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 
+@immutable
 class ButtonTextPrimary extends StatelessWidget {
-  String text;
-  bool isLoading;
+  final String text;
+  final bool isLoading;
 
-  VoidCallback onPressed;
+  final VoidCallback onPressed;
 
-  ButtonTextPrimary(
+  const ButtonTextPrimary(
       {super.key,
       required this.text,
       required this.onPressed,
@@ -14,26 +15,40 @@ class ButtonTextPrimary extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    print('Primary color: ${colorScheme.primary}');
+    print('Secondary color: ${colorScheme.secondary}');
+    print('Tertiary color: ${colorScheme.tertiary}');
+    print('Surface color: ${colorScheme.surface}');
+    print('Error color: ${colorScheme.error}');
+
     return ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
         backgroundColor: isLoading
-            ? const Color.fromARGB(255, 200, 200, 200)
-            : const Color.fromARGB(255, 241, 241, 241),
+            ? Theme.of(context).colorScheme.primary.withOpacity(0.7)
+            : Theme.of(context).colorScheme.primary,
         padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
         ),
       ),
       child: isLoading
-          ? const SizedBox(
+          ? SizedBox(
               width: 24,
               height: 24,
               child: CircularProgressIndicator(
                 strokeWidth: 2.0,
+                color: Theme.of(context).colorScheme.surface,
               ),
             )
-          : Text(text),
+          : Text(
+              text,
+              style: TextStyle(
+                  color: Theme.of(context).colorScheme.surface,
+                  fontWeight: FontWeight.bold),
+            ),
     );
   }
 }
