@@ -7,21 +7,16 @@ class ButtonTextPrimary extends StatelessWidget {
 
   final VoidCallback onPressed;
 
-  const ButtonTextPrimary(
-      {super.key,
-      required this.text,
-      required this.onPressed,
-      this.isLoading = false});
+  const ButtonTextPrimary({
+    super.key,
+    required this.text,
+    required this.onPressed,
+    this.isLoading = false,
+  });
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-
-    print('Primary color: ${colorScheme.primary}');
-    print('Secondary color: ${colorScheme.secondary}');
-    print('Tertiary color: ${colorScheme.tertiary}');
-    print('Surface color: ${colorScheme.surface}');
-    print('Error color: ${colorScheme.error}');
 
     return ElevatedButton(
       onPressed: onPressed,
@@ -40,14 +35,13 @@ class ButtonTextPrimary extends StatelessWidget {
               height: 24,
               child: CircularProgressIndicator(
                 strokeWidth: 2.0,
-                color: Theme.of(context).colorScheme.surface,
+                color: colorScheme.surface,
               ),
             )
           : Text(
               text,
               style: TextStyle(
-                  color: Theme.of(context).colorScheme.surface,
-                  fontWeight: FontWeight.bold),
+                  color: colorScheme.surface, fontWeight: FontWeight.bold),
             ),
     );
   }

@@ -9,10 +9,10 @@ class Student {
   Future<ApiResponse<StudentModel>> getStudent(String token) async {
     try {
       final response = await http.get(
-        Uri.parse("$url/user"),
+        Uri.parse("$url/student"),
         headers: <String, String>{
           "Authorization": "Bearer $token",
-          "Content-Type": "application/json; charset=UTF-8",
+          // "Content-Type": "application/json; charset=UTF-8",
         },
       );
 

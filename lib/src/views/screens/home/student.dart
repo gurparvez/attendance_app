@@ -20,8 +20,6 @@ class _HomeStudentState extends State<HomeStudent> {
       setState(() {
         isLoading = true;
       });
-
-      // FIXME: there is an error somewhere. It keeps going to login page
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       final String token = prefs.getString("token") ?? "";
       ApiResponse<StudentModel> studentData =
@@ -30,6 +28,7 @@ class _HomeStudentState extends State<HomeStudent> {
       //   TODO: store studentData to provider
     } catch (error) {
       debugPrint("ERROR: $error");
+      if(!mounted) return;
       context.go("/login");
     } finally {
       setState(() {
@@ -49,8 +48,10 @@ class _HomeStudentState extends State<HomeStudent> {
     final colorScheme = Theme.of(context).colorScheme;
 
     return isLoading
-        ? const Center(
-            child: CircularProgressIndicator(),
+        ? const Scaffold(
+            body: Center(
+              child: CircularProgressIndicator(),
+            ),
           )
         : Scaffold(
             appBar: AppBar(

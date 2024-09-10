@@ -39,27 +39,25 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _handleLogin() async {
-    if (!_formKey.currentState!.validate()) {
-      return;
-    }
+    if (!_formKey.currentState!.validate()) return;
     try {
       setState(() {
         _isLoading = true;
         _responseError = "";
       });
       _formKey.currentState?.save();
-      debugPrint("$formData");
       ApiResponse<UserModel> response = await Api().user.login(formData);
-      debugPrint(response.data.user!.name);
 
-      if(response.success) {
+      if (response.success) {
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString("token", response.data.accessToken!);
 
         final role = response.data.user!.role;
-        if(role == "student") {
+        if (role == "student") {
+          if (!mounted) return;
           context.go("/");
-        } else if(role == "teacher") {
+        } else if (role == "teacher") {
+          if (!mounted) return;
           context.go("/teacher");
         }
       }
@@ -100,7 +98,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       textAlign: TextAlign.center,
                     ),
-                    const SizedBox(height: 40),
+                    const SizedBox(height: 50),
                     TextFormField(
                       onSaved: (value) {
                         formData["auid"] = value.toString();
@@ -157,7 +155,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                     SizedBox(
-                      height: 44,
+                      height: 50,
                       child: Text(_responseError),
                     ),
                     Row(
