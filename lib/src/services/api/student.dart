@@ -1,10 +1,11 @@
 import 'dart:convert';
 import 'package:attendance_app/src/models/api_response.dart';
 import 'package:attendance_app/src/models/student.model.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
 class Student {
-  final String url = "https://attendance-d3x2.onrender.com/api/v1";
+  final String url = dotenv.env["SERVER_URL"] ?? "";
 
   Future<ApiResponse<StudentModel>> getStudent(String token) async {
     try {
@@ -12,7 +13,6 @@ class Student {
         Uri.parse("$url/student"),
         headers: <String, String>{
           "Authorization": "Bearer $token",
-          // "Content-Type": "application/json; charset=UTF-8",
         },
       );
 

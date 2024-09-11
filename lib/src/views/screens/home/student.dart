@@ -1,18 +1,20 @@
 import 'package:attendance_app/src/models/api_response.dart';
 import 'package:attendance_app/src/models/student.model.dart';
+import 'package:attendance_app/src/providers/student_provider.dart';
 import 'package:attendance_app/src/services/api/api.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class HomeStudent extends StatefulWidget {
+class HomeStudent extends ConsumerStatefulWidget {
   const HomeStudent({super.key});
 
   @override
-  State<HomeStudent> createState() => _HomeStudentState();
+  ConsumerState<HomeStudent> createState() => _HomeStudentState();
 }
 
-class _HomeStudentState extends State<HomeStudent> {
+class _HomeStudentState extends ConsumerState<HomeStudent> {
   bool isLoading = true;
 
   Future<void> getStudent() async {
@@ -25,10 +27,13 @@ class _HomeStudentState extends State<HomeStudent> {
       ApiResponse<StudentModel> studentData =
           await Api().student.getStudent(token);
 
-      //   TODO: store studentData to provider
+      if (studentData.success) {
+        if (!mounted) return;
+        ref.read(studentProvider.notifier).setStudent(studentData.data);
+      }
     } catch (error) {
       debugPrint("ERROR: $error");
-      if(!mounted) return;
+      if (!mounted) return;
       context.go("/login");
     } finally {
       setState(() {
@@ -46,6 +51,7 @@ class _HomeStudentState extends State<HomeStudent> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final student = ref.watch(studentProvider);
 
     return isLoading
         ? const Scaffold(

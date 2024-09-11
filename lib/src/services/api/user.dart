@@ -1,10 +1,11 @@
 import 'dart:convert';
 import 'package:attendance_app/src/models/api_response.dart';
 import 'package:attendance_app/src/models/user.model.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
 class User {
-  final String url = "https://attendance-d3x2.onrender.com/api/v1";
+  final String url = dotenv.env["SERVER_URL"] ?? "";
 
   Future<ApiResponse<UserModel>> login(Map<String, dynamic> data) async {
     try {
