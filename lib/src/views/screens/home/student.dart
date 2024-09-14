@@ -2,6 +2,7 @@ import 'package:attendance_app/src/models/api_response.dart';
 import 'package:attendance_app/src/models/student.model.dart';
 import 'package:attendance_app/src/providers/student_provider.dart';
 import 'package:attendance_app/src/services/api/api.dart';
+import 'package:attendance_app/src/views/screens/home/widget/card_subject.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -67,6 +68,11 @@ class _HomeStudentState extends ConsumerState<HomeStudent> {
                   icon: const Icon(Icons.account_circle_outlined),
                 ),
               ],
+            ),
+            body: CardSubject(
+              icon: "this is an icon",
+              subject: "Deep Learning",
+              course: "BCA 5th sem",
             ),
           );
   }
