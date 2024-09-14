@@ -1,2 +1,2 @@
 export 'login/login.dart';
-export 'home/student.dart';
+export 'home/student/student.dart';

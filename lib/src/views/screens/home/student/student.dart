@@ -2,7 +2,7 @@ import 'package:attendance_app/src/models/api_response.dart';
 import 'package:attendance_app/src/models/student.model.dart';
 import 'package:attendance_app/src/providers/student_provider.dart';
 import 'package:attendance_app/src/services/api/api.dart';
-import 'package:attendance_app/src/views/screens/home/widget/card_subject.dart';
+import 'package:attendance_app/src/views/screens/home/student/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -51,7 +51,6 @@ class _HomeStudentState extends ConsumerState<HomeStudent> {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
     final student = ref.watch(studentProvider);
 
     return isLoading
@@ -69,10 +68,17 @@ class _HomeStudentState extends ConsumerState<HomeStudent> {
                 ),
               ],
             ),
-            body: CardSubject(
-              icon: "this is an icon",
-              subject: "Deep Learning",
-              course: "BCA 5th sem",
+            body: Container(
+              margin: const EdgeInsets.symmetric(
+                vertical: 0,
+                horizontal: 16,
+              ),
+              child: Column(
+                children: <Widget>[
+                  HomeTitle(name: student!.user!.name!),
+
+                ],
+              ),
             ),
           );
   }

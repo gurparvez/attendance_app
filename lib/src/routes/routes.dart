@@ -4,11 +4,11 @@ import 'package:go_router/go_router.dart';
 final GoRouter routes = GoRouter(
   routes: [
     GoRoute(
-      path: "/login",
+      path: "/",
       builder: (context, state) => const LoginPage(),
     ),
     GoRoute(
-      path: "/",
+      path: "/student",
       builder: (context, state) => HomeStudent(),
     ),
   ],

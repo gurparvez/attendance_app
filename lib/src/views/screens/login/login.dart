@@ -23,7 +23,7 @@ class _LoginPageState extends State<LoginPage> {
   bool _isLoading = false;
   String _responseError = "";
 
-  OutlineInputBorder border = OutlineInputBorder(
+  final OutlineInputBorder border = OutlineInputBorder(
     borderRadius: BorderRadius.circular(8),
   );
 
@@ -55,7 +55,7 @@ class _LoginPageState extends State<LoginPage> {
         final role = response.data.user!.role;
         if (role == "student") {
           if (!mounted) return;
-          context.go("/");
+          context.go("/student");
         } else if (role == "teacher") {
           if (!mounted) return;
           context.go("/teacher");
