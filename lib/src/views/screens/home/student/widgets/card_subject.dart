@@ -24,7 +24,7 @@ class CardSubject extends StatelessWidget {
       onTap: onPressed,
       child: Card(
         elevation: elevation ?? 4,
-        margin: const EdgeInsets.all(12),
+        margin: const EdgeInsets.symmetric(vertical: 12),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
         ),

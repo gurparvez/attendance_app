@@ -12,6 +12,7 @@ class HomeTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -19,11 +20,16 @@ class HomeTitle extends StatelessWidget {
       children: <Widget>[
         Text(
           "Hello,",
-          style: textTheme.titleLarge,
+          style: textTheme.titleLarge!.copyWith(
+            fontWeight: FontWeight.bold,
+          ),
         ),
         Text(
           formatName(),
-          style: textTheme.headlineMedium,
+          style: textTheme.headlineMedium!.copyWith(
+            fontWeight: FontWeight.w900,
+            color: colorScheme.primary,
+          ),
         ),
       ],
     );
@@ -32,6 +38,6 @@ class HomeTitle extends StatelessWidget {
 
 extension StringExtensions on String {
   String capitalize() {
-    return "${this[0].toUpperCase()}${this.substring(1)}";
+    return "${this[0].toUpperCase()}${substring(1)}";
   }
 }

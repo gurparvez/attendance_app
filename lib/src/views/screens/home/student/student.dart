@@ -2,6 +2,7 @@ import 'package:attendance_app/src/models/api_response.dart';
 import 'package:attendance_app/src/models/student.model.dart';
 import 'package:attendance_app/src/providers/student_provider.dart';
 import 'package:attendance_app/src/services/api/api.dart';
+import 'package:attendance_app/src/views/screens/home/student/subjects_list.dart';
 import 'package:attendance_app/src/views/screens/home/student/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -67,16 +68,20 @@ class _HomeStudentState extends ConsumerState<HomeStudent> {
                   icon: const Icon(Icons.account_circle_outlined),
                 ),
               ],
+              forceMaterialTransparency: true,
             ),
             body: Container(
               margin: const EdgeInsets.symmetric(
                 vertical: 0,
-                horizontal: 16,
+                horizontal: 20,
               ),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   HomeTitle(name: student!.user!.name!),
-
+                  Expanded(
+                    child: SubjectsList(),
+                  ),
                 ],
               ),
             ),

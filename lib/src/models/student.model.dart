@@ -20,13 +20,13 @@ class StudentModel {
   set student(Student? student) => _student = student;
 
   StudentModel.fromJson(Map<String, dynamic> json) {
-    _user = json['user'] != null ? new User.fromJson(json['user']) : null;
+    _user = json['user'] != null ? User.fromJson(json['user']) : null;
     _student =
-        json['student'] != null ? new Student.fromJson(json['student']) : null;
+        json['student'] != null ? Student.fromJson(json['student']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     if (_user != null) {
       data['user'] = _user!.toJson();
     }

@@ -9,7 +9,7 @@ final GoRouter routes = GoRouter(
     ),
     GoRoute(
       path: "/student",
-      builder: (context, state) => HomeStudent(),
+      builder: (context, state) => const HomeStudent(),
     ),
   ],
 );
