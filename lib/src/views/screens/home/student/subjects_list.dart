@@ -62,8 +62,8 @@ class _SubjectsListState extends State<SubjectsList> {
                 itemCount: subjects.length,
                 itemBuilder: (context, index) {
                   return CardSubject(
-                    subject: subjects[index].name!,
-                    course: subjects[index].faculty!.name!,
+                    title: subjects[index].name!,
+                    subtitle: "Professor: ${subjects[index].faculty!.name!}",
                     onPressed: () {},
                   );
                 },

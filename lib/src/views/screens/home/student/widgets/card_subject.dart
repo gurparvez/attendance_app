@@ -6,15 +6,15 @@ class CardSubject extends StatelessWidget {
     this.elevation,
     this.cover,
     this.onPressed,
-    required this.subject,
-    required this.course,
+    required this.title,
+    required this.subtitle,
   });
 
   final double? elevation;
   final VoidCallback? onPressed;
   final String? cover;
-  final String subject;
-  final String course;
+  final String title;
+  final String subtitle;
 
   @override
   Widget build(BuildContext context) {
@@ -45,14 +45,14 @@ class CardSubject extends StatelessWidget {
                 children: [
                   const SizedBox(height: 8),
                   Text(
-                    subject,
+                    title,
                     style: textTheme.headlineMedium?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    course,
+                    subtitle,
                     style: textTheme.titleLarge,
                   ),
                 ],
