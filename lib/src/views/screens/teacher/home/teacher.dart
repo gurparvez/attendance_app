@@ -2,7 +2,7 @@ import 'package:attendance_app/src/models/api_response.dart';
 import 'package:attendance_app/src/models/teacher.model.dart';
 import 'package:attendance_app/src/providers/teacher_provider.dart';
 import 'package:attendance_app/src/services/api/api.dart';
-import 'package:attendance_app/src/views/screens/teacher/home/widgets/home_title.dart';
+import 'package:attendance_app/src/views/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
