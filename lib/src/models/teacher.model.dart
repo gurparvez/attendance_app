@@ -1,55 +1,34 @@
-class StudentModel {
-  String? _sId;
+class TeacherModel {
   User? _user;
-  Course? _course;
-  Department? _department;
+  Faculty? _faculty;
 
-  StudentModel(
-      {String? sId, User? user, Course? course, Department? department}) {
-    if (sId != null) {
-      _sId = sId;
-    }
+  TeacherModel({User? user, Faculty? faculty}) {
     if (user != null) {
       _user = user;
     }
-    if (course != null) {
-      _course = course;
-    }
-    if (department != null) {
-      _department = department;
+    if (faculty != null) {
+      _faculty = faculty;
     }
   }
 
-  String? get sId => _sId;
-  set sId(String? sId) => _sId = sId;
   User? get user => _user;
   set user(User? user) => _user = user;
-  Course? get course => _course;
-  set course(Course? course) => _course = course;
-  Department? get department => _department;
-  set department(Department? department) => _department = department;
+  Faculty? get faculty => _faculty;
+  set faculty(Faculty? faculty) => _faculty = faculty;
 
-  StudentModel.fromJson(Map<String, dynamic> json) {
-    _sId = json['_id'];
-    _user = json['user'] != null ? User.fromJson(json['user']) : null;
-    _course =
-    json['course'] != null ? Course.fromJson(json['course']) : null;
-    _department = json['department'] != null
-        ? Department.fromJson(json['department'])
-        : null;
+  TeacherModel.fromJson(Map<String, dynamic> json) {
+    _user = json['user'] != null ? new User.fromJson(json['user']) : null;
+    _faculty =
+    json['faculty'] != null ? new Faculty.fromJson(json['faculty']) : null;
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['_id'] = _sId;
     if (_user != null) {
       data['user'] = _user!.toJson();
     }
-    if (_course != null) {
-      data['course'] = _course!.toJson();
-    }
-    if (_department != null) {
-      data['department'] = _department!.toJson();
+    if (_faculty != null) {
+      data['faculty'] = _faculty!.toJson();
     }
     return data;
   }
@@ -151,19 +130,17 @@ class User {
   }
 }
 
-class Course {
+class Faculty {
   String? _sId;
-  String? _name;
-  int? _semester;
+  String? _userId;
   String? _departmentId;
   String? _createdAt;
   String? _updatedAt;
   int? _iV;
 
-  Course(
+  Faculty(
       {String? sId,
-        String? name,
-        int? semester,
+        String? userId,
         String? departmentId,
         String? createdAt,
         String? updatedAt,
@@ -171,11 +148,8 @@ class Course {
     if (sId != null) {
       _sId = sId;
     }
-    if (name != null) {
-      _name = name;
-    }
-    if (semester != null) {
-      _semester = semester;
+    if (userId != null) {
+      _userId = userId;
     }
     if (departmentId != null) {
       _departmentId = departmentId;
@@ -193,10 +167,8 @@ class Course {
 
   String? get sId => _sId;
   set sId(String? sId) => _sId = sId;
-  String? get name => _name;
-  set name(String? name) => _name = name;
-  int? get semester => _semester;
-  set semester(int? semester) => _semester = semester;
+  String? get userId => _userId;
+  set userId(String? userId) => _userId = userId;
   String? get departmentId => _departmentId;
   set departmentId(String? departmentId) => _departmentId = departmentId;
   String? get createdAt => _createdAt;
@@ -206,10 +178,9 @@ class Course {
   int? get iV => _iV;
   set iV(int? iV) => _iV = iV;
 
-  Course.fromJson(Map<String, dynamic> json) {
+  Faculty.fromJson(Map<String, dynamic> json) {
     _sId = json['_id'];
-    _name = json['name'];
-    _semester = json['semester'];
+    _userId = json['userId'];
     _departmentId = json['departmentId'];
     _createdAt = json['createdAt'];
     _updatedAt = json['updatedAt'];
@@ -219,69 +190,8 @@ class Course {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['_id'] = _sId;
-    data['name'] = _name;
-    data['semester'] = _semester;
+    data['userId'] = _userId;
     data['departmentId'] = _departmentId;
-    data['createdAt'] = _createdAt;
-    data['updatedAt'] = _updatedAt;
-    data['__v'] = _iV;
-    return data;
-  }
-}
-
-class Department {
-  String? _sId;
-  String? _name;
-  String? _createdAt;
-  String? _updatedAt;
-  int? _iV;
-
-  Department(
-      {String? sId,
-        String? name,
-        String? createdAt,
-        String? updatedAt,
-        int? iV}) {
-    if (sId != null) {
-      _sId = sId;
-    }
-    if (name != null) {
-      _name = name;
-    }
-    if (createdAt != null) {
-      _createdAt = createdAt;
-    }
-    if (updatedAt != null) {
-      _updatedAt = updatedAt;
-    }
-    if (iV != null) {
-      _iV = iV;
-    }
-  }
-
-  String? get sId => _sId;
-  set sId(String? sId) => _sId = sId;
-  String? get name => _name;
-  set name(String? name) => _name = name;
-  String? get createdAt => _createdAt;
-  set createdAt(String? createdAt) => _createdAt = createdAt;
-  String? get updatedAt => _updatedAt;
-  set updatedAt(String? updatedAt) => _updatedAt = updatedAt;
-  int? get iV => _iV;
-  set iV(int? iV) => _iV = iV;
-
-  Department.fromJson(Map<String, dynamic> json) {
-    _sId = json['_id'];
-    _name = json['name'];
-    _createdAt = json['createdAt'];
-    _updatedAt = json['updatedAt'];
-    _iV = json['__v'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['_id'] = _sId;
-    data['name'] = _name;
     data['createdAt'] = _createdAt;
     data['updatedAt'] = _updatedAt;
     data['__v'] = _iV;

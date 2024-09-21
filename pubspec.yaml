@@ -16,6 +16,7 @@ dependencies:
   go_router: ^14.2.7
   shared_preferences: ^2.3.2
   flutter_dotenv: ^5.1.0
+  syncfusion_flutter_calendar: ^27.1.48
 
 dev_dependencies:
   flutter_test:

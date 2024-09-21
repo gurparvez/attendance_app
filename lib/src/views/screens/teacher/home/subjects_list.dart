@@ -1,4 +1,4 @@
-import 'package:attendance_app/src/views/screens/home/teacher/widgets/widgets.dart';
+import 'package:attendance_app/src/views/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
 class SubjectsList extends StatelessWidget {
@@ -20,7 +20,7 @@ class SubjectsList extends StatelessWidget {
         final String course =
             subjects[index]["course"] ?? "Unknown Course";
 
-        return CardCourse(subject: subject, course: course);
+        return CardSubject(title: subject, subtitle: course);
       },
     );
   }

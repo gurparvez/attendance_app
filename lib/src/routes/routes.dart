@@ -1,15 +1,15 @@
+import 'package:attendance_app/src/routes/student.route.dart';
+import 'package:attendance_app/src/routes/teacher.route.dart';
 import 'package:attendance_app/src/views/screens/screens.dart';
 import 'package:go_router/go_router.dart';
 
 final GoRouter routes = GoRouter(
-  routes: [
+  routes: <RouteBase>[
     GoRoute(
       path: "/",
       builder: (context, state) => const LoginPage(),
     ),
-    GoRoute(
-      path: "/student",
-      builder: (context, state) => const HomeStudent(),
-    ),
+    studentRoutes,
+    teacherRoutes,
   ],
 );

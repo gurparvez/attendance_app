@@ -1,8 +1,7 @@
 import 'package:attendance_app/src/models/api_response.dart';
 import 'package:attendance_app/src/models/subject.model.dart';
 import 'package:attendance_app/src/services/api/api.dart';
-import 'package:attendance_app/src/views/screens/home/student/widgets/widgets.dart';
-import 'package:attendance_app/src/views/widgets/loaders/card_shimmer_list.dart';
+import 'package:attendance_app/src/views/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
