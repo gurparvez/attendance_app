@@ -1,16 +1,16 @@
-class SubjectModel {
+class SubjectStudentModel {
   String? id;
   String? name;
   Faculty? faculty;
 
-  SubjectModel({
+  SubjectStudentModel({
     this.id,
     this.name,
     this.faculty,
   });
 
-  factory SubjectModel.fromJson(Map<String, dynamic> json) {
-    return SubjectModel(
+  factory SubjectStudentModel.fromJson(Map<String, dynamic> json) {
+    return SubjectStudentModel(
       id: json['_id'],
       name: json['name'],
       faculty: json['faculty'] != null ? Faculty.fromJson(json['faculty']) : null,
@@ -25,6 +25,7 @@ class SubjectModel {
     };
   }
 }
+
 class Faculty {
   String? _sId;
   String? _auid;

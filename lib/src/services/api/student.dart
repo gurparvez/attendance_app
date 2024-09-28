@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:attendance_app/src/models/api_response.dart';
 import 'package:attendance_app/src/models/student.model.dart';
-import 'package:attendance_app/src/models/subject.model.dart';
+import 'package:attendance_app/src/models/subject.student.model.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
@@ -34,7 +34,7 @@ class Student {
     }
   }
 
-  Future<ApiResponse<List<SubjectModel>>> getSubjects(String token) async {
+  Future<ApiResponse<List<SubjectStudentModel>>> getSubjects(String token) async {
     try {
       final response = await http.get(
         Uri.parse("$url/subject/student"),
@@ -46,10 +46,10 @@ class Student {
       final responseData = jsonDecode(response.body.toString());
 
       if (response.statusCode == 200) {
-        return ApiResponse<List<SubjectModel>>.fromJson(
+        return ApiResponse<List<SubjectStudentModel>>.fromJson(
           responseData,
           (data) => (data as List)
-              .map((item) => SubjectModel.fromJson(item))
+              .map((item) => SubjectStudentModel.fromJson(item))
               .toList(),
         );
       } else {

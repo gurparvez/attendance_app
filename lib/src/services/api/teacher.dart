@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:attendance_app/src/models/api_response.dart';
+import 'package:attendance_app/src/models/subject.teacher.model.dart';
 import 'package:attendance_app/src/models/teacher.model.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
@@ -31,6 +32,34 @@ class Teacher {
       }
     } catch (e) {
       throw Exception('Error occurred in getting user: $e');
+    }
+  }
+
+  Future<ApiResponse<List<SubjectTeacherModel>>> getSubjects(String token) async {
+    try {
+      final response = await http.get(
+        Uri.parse("$url/subject/faculty"),
+        headers: <String, String>{
+          "Authorization": "Bearer $token",
+        },
+      );
+
+      final responseData = jsonDecode(response.body.toString());
+
+      if (response.statusCode == 200) {
+        return ApiResponse<List<SubjectTeacherModel>>.fromJson(
+          responseData,
+              (data) => (data as List)
+              .map((item) => SubjectTeacherModel.fromJson(item))
+              .toList(),
+        );
+      } else {
+        throw Exception(
+          "${responseData["message"]}",
+        );
+      }
+    } catch (e) {
+      throw Exception('Error occurred while getting subjects: $e');
     }
   }
 }

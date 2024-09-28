@@ -1,9 +1,10 @@
 import 'package:attendance_app/src/models/api_response.dart';
-import 'package:attendance_app/src/models/subject.model.dart';
+import 'package:attendance_app/src/models/subject.student.model.dart';
 import 'package:attendance_app/src/services/api/api.dart';
 import 'package:attendance_app/src/views/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:go_router/go_router.dart';
 
 class SubjectsList extends StatefulWidget {
   const SubjectsList({super.key});
@@ -15,7 +16,7 @@ class SubjectsList extends StatefulWidget {
 class _SubjectsListState extends State<SubjectsList> {
   bool _isLoading = true;
   String _responseError = "";
-  List<SubjectModel> subjects = [];
+  List<SubjectStudentModel> subjects = [];
 
   Future<void> getSubjects() async {
     try {
@@ -25,7 +26,7 @@ class _SubjectsListState extends State<SubjectsList> {
       });
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       final String token = prefs.getString("token") ?? "";
-      ApiResponse<List<SubjectModel>> subjectsData =
+      ApiResponse<List<SubjectStudentModel>> subjectsData =
           await Api().student.getSubjects(token);
 
       if (subjectsData.success) {
@@ -63,7 +64,9 @@ class _SubjectsListState extends State<SubjectsList> {
                   return CardSubject(
                     title: subjects[index].name!,
                     subtitle: "Professor: ${subjects[index].faculty!.name!}",
-                    onPressed: () {},
+                    onPressed: () {
+                      context.go("/student/attendance/${subjects[index].id}", extra: subjects[index]);
+                    },
                   );
                 },
               );

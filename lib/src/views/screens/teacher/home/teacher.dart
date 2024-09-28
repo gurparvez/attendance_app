@@ -2,6 +2,7 @@ import 'package:attendance_app/src/models/api_response.dart';
 import 'package:attendance_app/src/models/teacher.model.dart';
 import 'package:attendance_app/src/providers/teacher_provider.dart';
 import 'package:attendance_app/src/services/api/api.dart';
+import 'package:attendance_app/src/views/screens/teacher/home/subjects_list.dart';
 import 'package:attendance_app/src/views/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -78,8 +79,8 @@ class _HomeTeacherState extends ConsumerState<HomeTeacher> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   HomeTitle(name: teacher!.user!.name!),
-                  const Expanded(
-                    child: Placeholder(),
+                  Expanded(
+                    child: SubjectsList(),
                   ),
                 ],
               ),
