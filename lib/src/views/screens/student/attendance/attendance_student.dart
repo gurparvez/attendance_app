@@ -2,7 +2,6 @@ import 'package:attendance_app/src/models/subject.student.model.dart';
 import 'package:attendance_app/src/views/screens/student/attendance/calender_stat.dart';
 import 'package:attendance_app/src/views/widgets/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class AttendanceStudent extends StatefulWidget {
   const AttendanceStudent(
@@ -27,6 +26,7 @@ class _AttendanceStudentState extends State<AttendanceStudent> {
   @override
   void initState() {
     super.initState();
+    // We can remove this listener and change _selectedMonth back to a state variable
     _selectedMonth.addListener(() {
       // _getAttendanceData();
       print(_selectedMonth.value);
@@ -69,6 +69,7 @@ class _AttendanceStudentState extends State<AttendanceStudent> {
                       subjectId: widget.subjectId,
                       month: _selectedMonth.value,
                     ),
+                    const SizedBox(height: 20),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [

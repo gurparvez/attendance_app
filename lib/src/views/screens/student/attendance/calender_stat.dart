@@ -9,8 +9,11 @@ List<Attendance> getMockAttendanceData() {
     Attendance(DateTime(2024, 9, 4), true),
     Attendance(DateTime(2024, 9, 5), false),
     Attendance(DateTime(2024, 9, 6), true),
-    Attendance(DateTime(2024, 9, 7), true),
-    Attendance(DateTime(2024, 9, 8), false),
+    Attendance(DateTime(2024, 9, 9), true),
+    Attendance(DateTime(2024, 9, 10), true),
+    Attendance(DateTime(2024, 9, 11), true),
+    Attendance(DateTime(2024, 9, 12), true),
+    Attendance(DateTime(2024, 9, 13), true),
   ];
 }
 
@@ -33,7 +36,15 @@ class _CalenderStatState extends State<CalenderStat> {
 
   // TODO: make an api call to get attendance data for the selected month
   void _getAttendanceData() async {
-    // await AttendanceService.getAttendanceData(widget.subjectId, _selectedMonth.value);
+    // await AttendanceService.getAttendanceData(widget.subjectId, widget.month);
+  }
+
+  void calculateStates() {
+    int totalClasses = getMockAttendanceData().length;
+    int presentClasses =
+        getMockAttendanceData().where((element) => element.isPresent).length;
+    int absentClasses = totalClasses - presentClasses;
+    double attendancePercentage = (presentClasses / totalClasses) * 100;
   }
 
   @override
@@ -43,9 +54,10 @@ class _CalenderStatState extends State<CalenderStat> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            cardStat("Classes", "7/10"),
-            cardStat("This Month", "70%"),
-            cardStat("Attendance", "78%"),
+            cardStat("Classes", "10"),
+            cardStat("Present", "8"),
+            cardStat("Absent", "2"),
+            cardStat("Attendance", "80%"),
           ],
         ),
         const SizedBox(height: 20),
