@@ -1,5 +1,5 @@
 import 'package:attendance_app/src/models/subject.student.model.dart';
-import 'package:attendance_app/src/views/screens/student/attendance/calender_stat.dart';
+import 'package:attendance_app/src/views/screens/student/attendance/stats_and_calender.dart';
 import 'package:attendance_app/src/views/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
@@ -15,21 +15,19 @@ class AttendanceStudent extends StatefulWidget {
 }
 
 class _AttendanceStudentState extends State<AttendanceStudent> {
-  ValueNotifier<String> _selectedMonth = ValueNotifier<String>("");
+  DateTime startDate = DateTime(DateTime.now().year, DateTime.now().month, 1);
+  DateTime endDate = DateTime.now();
 
-  void _handleMonthSelected(String month) {
+  void _selectStartDate(DateTime date) {
     setState(() {
-      _selectedMonth.value = month;
+      startDate = date;
     });
+    debugPrint("$startDate");
   }
 
-  @override
-  void initState() {
-    super.initState();
-    // We can remove this listener and change _selectedMonth back to a state variable
-    _selectedMonth.addListener(() {
-      // _getAttendanceData();
-      print(_selectedMonth.value);
+  void _selectEndDate(DateTime date) {
+    setState(() {
+      endDate = date;
     });
   }
 
@@ -56,31 +54,51 @@ class _AttendanceStudentState extends State<AttendanceStudent> {
                     .titleLarge!
                     .copyWith(fontWeight: FontWeight.bold),
               ),
-              // const SizedBox(height: 20),
-              SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        MonthPicker(onMonthSelected: _handleMonthSelected),
-                      ],
-                    ),
-                    CalenderStat(
-                      subjectId: widget.subjectId,
-                      month: _selectedMonth.value,
-                    ),
-                    const SizedBox(height: 20),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        ButtonTextPrimary(
-                          text: "Add Today's",
-                          onPressed: () {},
+              const SizedBox(height: 20),
+              Column(
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: DatePicker(
+                          selectedDate: startDate,
+                          onDateSelected: _selectStartDate,
                         ),
-                      ],
-                    ),
-                  ],
-                ),
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Text(
+                          "To",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      Expanded(
+                        child: DatePicker(
+                          selectedDate: endDate,
+                          onDateSelected: _selectEndDate,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  StatsAndCalender(
+                    subjectId: widget.subjectId,
+                    startDate: startDate,
+                    endDate: endDate,
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      ButtonTextPrimary(
+                        text: "Add Today's",
+                        onPressed: () {},
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ],
           ),

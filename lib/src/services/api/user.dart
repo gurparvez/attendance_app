@@ -3,6 +3,7 @@ import 'package:attendance_app/src/models/api_response.dart';
 import 'package:attendance_app/src/models/user.model.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class User {
   final String url = dotenv.env["SERVER_URL"] ?? "";
@@ -34,5 +35,12 @@ class User {
     }
   }
 
-  void logout() {}
+  void logout() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    try {
+      await prefs.remove("token");
+    } catch (e) {
+      throw Exception("Something went wrong, unable to logout!");
+    }
+  }
 }

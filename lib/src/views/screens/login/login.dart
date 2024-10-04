@@ -76,117 +76,115 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: ConstrainedBox(
-            constraints: BoxConstraints(
-              minHeight: MediaQuery.of(context).size.height,
-            ),
-            child: IntrinsicHeight(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Form(
-                    key: _formKey,
-                    child: Expanded(
-                      flex: 2,
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const SizedBox(height: 40),
-                            Text(
-                              'Akal University Attendance',
-                              style: TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                                color: Theme.of(context).colorScheme.primary,
-                              ),
-                              textAlign: TextAlign.center,
+      body: SingleChildScrollView(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            minHeight: MediaQuery.of(context).size.height,
+          ),
+          child: IntrinsicHeight(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Form(
+                  key: _formKey,
+                  child: Expanded(
+                    flex: 2,
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const SizedBox(height: 40),
+                          Text(
+                            'Akal University Attendance',
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                              color: Theme.of(context).colorScheme.primary,
                             ),
-                            const SizedBox(height: 50),
-                            TextFormField(
-                              onSaved: (value) {
-                                formData["auid"] = value.toString();
-                              },
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return "Please enter your id";
-                                }
-                                return null;
-                              },
-                              decoration: InputDecoration(
-                                labelText: 'User ID',
-                                hintText: 'Enter User ID',
-                                prefixIcon: const Icon(Icons.person_outline),
-                                border: border,
-                                enabledBorder: _responseError != "" ? borderRed : border,
-                                focusedBorder: _responseError != "" ? borderRed : border,
-                              ),
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(height: 50),
+                          TextFormField(
+                            onSaved: (value) {
+                              formData["auid"] = value.toString();
+                            },
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return "Please enter your id";
+                              }
+                              return null;
+                            },
+                            decoration: InputDecoration(
+                              labelText: 'User ID',
+                              hintText: 'Enter User ID',
+                              prefixIcon: const Icon(Icons.person_outline),
+                              border: border,
+                              enabledBorder: _responseError != "" ? borderRed : border,
+                              focusedBorder: _responseError != "" ? borderRed : border,
                             ),
-                            const SizedBox(height: 16),
-                            TextFormField(
-                              onSaved: (value) {
-                                formData["password"] = value.toString();
-                              },
-                              obscureText: !_isPasswordVisible,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return "Please enter your password";
-                                }
-                                if (value.length < 7) {
-                                  return "Password should be at least 7 characters long";
-                                }
-                                return null;
-                              },
-                              decoration: InputDecoration(
-                                labelText: 'Password',
-                                hintText: 'Enter Password',
-                                prefixIcon: const Icon(Icons.lock_outline),
-                                suffixIcon: IconButton(
-                                  onPressed: toggleShowPassword,
-                                  icon: _isPasswordVisible
-                                      ? const Icon(Icons.visibility_off)
-                                      : const Icon(Icons.visibility),
+                          ),
+                          const SizedBox(height: 16),
+                          TextFormField(
+                            onSaved: (value) {
+                              formData["password"] = value.toString();
+                            },
+                            obscureText: !_isPasswordVisible,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return "Please enter your password";
+                              }
+                              if (value.length < 7) {
+                                return "Password should be at least 7 characters long";
+                              }
+                              return null;
+                            },
+                            decoration: InputDecoration(
+                              labelText: 'Password',
+                              hintText: 'Enter Password',
+                              prefixIcon: const Icon(Icons.lock_outline),
+                              suffixIcon: IconButton(
+                                onPressed: toggleShowPassword,
+                                icon: _isPasswordVisible
+                                    ? const Icon(Icons.visibility_off)
+                                    : const Icon(Icons.visibility),
+                              ),
+                              border: border,
+                              enabledBorder: _responseError != "" ? borderRed : border,
+                              focusedBorder: _responseError != "" ? borderRed : border,
+                            ),
+                          ),
+                          SizedBox(
+                            height: 50,
+                            child: Text(_responseError),
+                          ),
+                          Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                child: ButtonTextPrimary(
+                                  text: "Log In",
+                                  onPressed: _handleLogin,
+                                  isLoading: _isLoading,
                                 ),
-                                border: border,
-                                enabledBorder: _responseError != "" ? borderRed : border,
-                                focusedBorder: _responseError != "" ? borderRed : border,
                               ),
-                            ),
-                            SizedBox(
-                              height: 50,
-                              child: Text(_responseError),
-                            ),
-                            Row(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Expanded(
-                                  child: ButtonTextPrimary(
-                                    text: "Log In",
-                                    onPressed: _handleLogin,
-                                    isLoading: _isLoading,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
+                            ],
+                          ),
+                        ],
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 16),
-                    child: Text(
-                      'Akal University, Talwandi Sabo, Punjab, India. For any assistance, please contact our support team at support@auts.ac.in or call us at +91-9682343567. Your data privacy is our priority.',
-                      style: TextStyle(fontSize: 12, color: Colors.grey[600]),
-                      textAlign: TextAlign.center,
-                    ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 16),
+                  child: Text(
+                    'Akal University, Talwandi Sabo, Punjab, India. For any assistance, please contact our support team at support@auts.ac.in or call us at +91-9682343567. Your data privacy is our priority.',
+                    style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                    textAlign: TextAlign.center,
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),

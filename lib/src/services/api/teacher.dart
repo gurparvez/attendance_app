@@ -5,11 +5,14 @@ import 'package:attendance_app/src/models/subject.teacher.model.dart';
 import 'package:attendance_app/src/models/teacher.model.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Teacher {
   final String url = dotenv.env["SERVER_URL"] ?? "";
 
-  Future<ApiResponse<TeacherModel>> getTeacher(String token) async {
+  Future<ApiResponse<TeacherModel>> getTeacher() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String token = prefs.getString("token") ?? "";
     try {
       final response = await http.get(
         Uri.parse("$url/faculty"),
@@ -23,7 +26,7 @@ class Teacher {
       if (response.statusCode == 200) {
         return ApiResponse<TeacherModel>.fromJson(
           responseData,
-              (data) => TeacherModel.fromJson(data),
+          (data) => TeacherModel.fromJson(data),
         );
       } else {
         throw Exception(
@@ -35,7 +38,9 @@ class Teacher {
     }
   }
 
-  Future<ApiResponse<List<SubjectTeacherModel>>> getSubjects(String token) async {
+  Future<ApiResponse<List<SubjectTeacherModel>>> getSubjects() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String token = prefs.getString("token") ?? "";
     try {
       final response = await http.get(
         Uri.parse("$url/subject/faculty"),
@@ -49,7 +54,7 @@ class Teacher {
       if (response.statusCode == 200) {
         return ApiResponse<List<SubjectTeacherModel>>.fromJson(
           responseData,
-              (data) => (data as List)
+          (data) => (data as List)
               .map((item) => SubjectTeacherModel.fromJson(item))
               .toList(),
         );

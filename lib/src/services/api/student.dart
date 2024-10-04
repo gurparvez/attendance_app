@@ -2,13 +2,17 @@ import 'dart:convert';
 import 'package:attendance_app/src/models/api_response.dart';
 import 'package:attendance_app/src/models/student.model.dart';
 import 'package:attendance_app/src/models/subject.student.model.dart';
+import 'package:attendance_app/src/models/subject_attendance.model.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Student {
   final String url = dotenv.env["SERVER_URL"] ?? "";
 
-  Future<ApiResponse<StudentModel>> getStudent(String token) async {
+  Future<ApiResponse<StudentModel>> getStudent() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String token = prefs.getString("token") ?? "";
     try {
       final response = await http.get(
         Uri.parse("$url/student"),
@@ -34,9 +38,11 @@ class Student {
     }
   }
 
-  Future<ApiResponse<List<SubjectStudentModel>>> getSubjects(String token) async {
+  Future<ApiResponse<List<SubjectStudentModel>>> getSubjects() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String token = prefs.getString("token") ?? "";
     try {
-      final response = await http.get(
+      final response = await http.post(
         Uri.parse("$url/subject/student"),
         headers: <String, String>{
           "Authorization": "Bearer $token",
@@ -61,4 +67,47 @@ class Student {
       throw Exception('Error occurred while getting subjects: $e');
     }
   }
+
+  Future<ApiResponse<List<SubjectAttendanceModel>>> getSubjectAttendance(String subjectId, DateTime startDate, DateTime endDate) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String token = prefs.getString("token") ?? "";
+
+    Map<String, dynamic> body = {
+      "subjectId": subjectId,
+      "startDate": startDate.toIso8601String(),
+      "endDate": endDate.toIso8601String(),
+    };
+
+    try {
+      final response = await http.post(
+        Uri.parse("$url/attendance/student"),
+        headers: <String, String>{
+          "Authorization": "Bearer $token",
+          "Content-Type": "application/json; charset=UTF-8",
+        },
+        body: jsonEncode(body),
+      );
+
+      final responseData = jsonDecode(response.body.toString());
+
+      if (response.statusCode == 200) {
+        return ApiResponse<List<SubjectAttendanceModel>>.fromJson(
+          responseData,
+          (data) => (data as List)
+              .map((item) => SubjectAttendanceModel.fromJson(item))
+              .toList(),
+        );
+      } else {
+        throw Exception(
+          "${responseData["message"]}",
+        );
+      }
+    } catch (e) {
+      throw Exception('Error occurred while getting attendance: $e');
+    }
+  }
+
+  isTeacherPresent() async {}
+
+  markTodaysAttendance() async {}
 }

@@ -3,7 +3,6 @@ import 'package:attendance_app/src/models/subject.teacher.model.dart';
 import 'package:attendance_app/src/services/api/api.dart';
 import 'package:attendance_app/src/views/widgets/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class SubjectsList extends StatefulWidget {
   @override
@@ -21,10 +20,8 @@ class _SubjectsListState extends State<SubjectsList> {
         _isLoading = true;
         _responseError = "";
       });
-      final SharedPreferences prefs = await SharedPreferences.getInstance();
-      final String token = prefs.getString("token") ?? "";
       ApiResponse<List<SubjectTeacherModel>> subjectsData =
-      await Api().teacher.getSubjects(token);
+      await Api().teacher.getSubjects();
 
       if (subjectsData.success) {
         setState(() {
