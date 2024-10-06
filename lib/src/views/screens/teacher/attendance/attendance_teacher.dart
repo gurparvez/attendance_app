@@ -43,7 +43,7 @@ class _AttendanceTeacherState extends State<AttendanceTeacher> {
       debugPrint("getting students list of subject: ${widget.subjectId}...");
       ApiResponse<List<StudentsAttendanceModel>> studentsListResponse =
           await Api().teacher.getSubjectAttendance(widget.subjectId, date);
-      if(studentsListResponse.success) {
+      if (studentsListResponse.success) {
         setState(() {
           studentsList = studentsListResponse.data[0];
         });
@@ -105,22 +105,35 @@ class _AttendanceTeacherState extends State<AttendanceTeacher> {
                   ? const Center(
                       child: CircularProgressIndicator(),
                     )
-                  : _responseError != "" ? Center(child: Text(_responseError),) : ListView.builder(
-                      itemCount: studentsList.students!.length,
-                      itemBuilder: (context, index) {
-                        return ListTile(
-                          leading: studentsList.students![index].present! ? const Icon(Icons.check) : const Icon(Icons.close),
-                          title: Text(studentsList.students![index].user!.name!),
-                          subtitle: Text(studentsList.students![index].user!.auid!),
-                          trailing: _isLoading
-                              ? const CircularProgressIndicator()
-                              : TextButton(
-                                  onPressed: () {},
-                                  child: studentsList.students![index].present! ? const Text("Unmark") : const Text("Mark"),
-                                ),
-                        );
-                      },
-                    ),
+                  : _responseError != ""
+                      ? Center(child: Text(_responseError))
+                      : ListView.builder(
+                          itemCount: studentsList.students!.length,
+                          itemBuilder: (context, index) {
+                            final student = studentsList.students![index];
+                            return ListTile(
+                              leading: studentsList.students![index].present!
+                                  ? const Icon(
+                                      Icons.check,
+                                      color: Colors.green,
+                                    )
+                                  : const Icon(Icons.close, color: Colors.red),
+                              title: Text(student.user!.name!),
+                              subtitle: Text(student.user!.auid!),
+                              trailing: student.present!
+                                  ? ButtonTextSecondary(
+                                      text: "UnMark",
+                                      isLoading: _isLoading,
+                                      onPressed: () {},
+                                    )
+                                  : ButtonTextPrimary(
+                                      text: "Mark",
+                                      isLoading: _isLoading,
+                                      onPressed: () {},
+                                    ),
+                            );
+                          },
+                        ),
             ),
           ],
         ),

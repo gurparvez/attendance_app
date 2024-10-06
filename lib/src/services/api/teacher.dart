@@ -114,4 +114,44 @@ class Teacher {
       throw Exception('Error occurred while getting students: $e');
     }
   }
+
+  unmarkAttendance(String subjectId, DateTime date, String studentId) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String token = prefs.getString("token") ?? "";
+
+    Map<String, dynamic> body = {
+      "studentId": studentId,
+      "subjectId": subjectId,
+      "date": DateFormat('yyyy-MM-dd').format(date),
+    };
+
+    try {
+      final response = await http.post(
+        Uri.parse("$url/attendance/subject"),
+        headers: <String, String>{
+          "Authorization": "Bearer $token",
+          "Content-Type": "application/json",
+        },
+        body: jsonEncode(body),
+      );
+
+      final responseData = jsonDecode(response.body.toString());
+
+      if (response.statusCode == 200) {
+        return ApiResponse<List<StudentsAttendanceModel>>.fromJson(
+          responseData,
+              (data) => (data as List)
+              .map((item) => StudentsAttendanceModel.fromJson(item))
+              .toList(),
+        );
+      } else {
+        debugPrint("$responseData");
+        throw Exception(
+          "${responseData["message"]}",
+        );
+      }
+    } catch (e) {
+      throw Exception('Error occurred while getting students: $e');
+    }
+  }
 }
