@@ -19,7 +19,7 @@ class AttendanceTeacher extends StatefulWidget {
 class _AttendanceTeacherState extends State<AttendanceTeacher> {
   bool _isLoading = false;
   String _responseError = "";
-  DateTime date = DateTime.now();
+  DateTime date = DateTime.parse("2024-10-02");
   StudentsAttendanceModel studentsList = StudentsAttendanceModel();
 
   @override

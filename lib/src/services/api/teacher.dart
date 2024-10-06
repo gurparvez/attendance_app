@@ -90,6 +90,7 @@ class Teacher {
         Uri.parse("$url/attendance/subject"),
         headers: <String, String>{
           "Authorization": "Bearer $token",
+          "Content-Type": "application/json",
         },
         body: jsonEncode(body),
       );
