@@ -51,7 +51,7 @@ class _StatsAndCalenderState extends State<StatsAndCalender> {
         _isLoading = true;
         _responseError = "";
       });
-      debugPrint("getting attendance");
+      debugPrint("getting attendance...");
       ApiResponse<List<SubjectAttendanceModel>> attendanceResponse =
           await Api().student.getSubjectAttendance(
                 widget.subjectId,
@@ -101,20 +101,16 @@ class _StatsAndCalenderState extends State<StatsAndCalender> {
                     ],
                   ),
                   const SizedBox(height: 20),
-                  Container(
-                    // height: 400, // Set a fixed height for the calendar
-                    child: SfCalendar(
-                      view: CalendarView.month,
-                      minDate: widget.startDate,
-                      maxDate: widget.endDate,
-                      dataSource: AttendanceDataSource(attendanceList),
-                      monthViewSettings: const MonthViewSettings(
-                        appointmentDisplayMode:
-                            MonthAppointmentDisplayMode.indicator,
-                      ),
-                      allowViewNavigation: true,
-                      showNavigationArrow: true,
+                  SfCalendar(
+                    view: CalendarView.month,
+                    minDate: widget.startDate,
+                    maxDate: widget.endDate,
+                    dataSource: AttendanceDataSource(attendanceList),
+                    monthViewSettings: const MonthViewSettings(
+                      appointmentDisplayMode:
+                          MonthAppointmentDisplayMode.indicator,
                     ),
+                    showNavigationArrow: true,
                   ),
                 ],
               );

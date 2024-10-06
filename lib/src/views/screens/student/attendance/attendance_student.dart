@@ -34,75 +34,78 @@ class _AttendanceStudentState extends State<AttendanceStudent> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        actions: <Widget>[
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.account_circle_outlined),
+          ),
+        ],
+        forceMaterialTransparency: true,
+      ),
       body: SafeArea(
         child: Container(
           margin: const EdgeInsets.symmetric(
             vertical: 0,
             horizontal: 20,
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                "Attendance",
-                style: TextStyle(fontSize: 18),
-              ),
-              Text(
-                "Subject: ${widget.subject.name}",
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge!
-                    .copyWith(fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 20),
-              Column(
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: DatePicker(
-                          selectedDate: startDate,
-                          onDateSelected: _selectStartDate,
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  "Attendance",
+                  style: TextStyle(fontSize: 18),
+                ),
+                Text(
+                  "Subject: ${widget.subject.name}",
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleLarge!
+                      .copyWith(fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 20),
+                Column(
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: DatePicker(
+                            selectedDate: startDate,
+                            onDateSelected: _selectStartDate,
+                          ),
                         ),
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Text(
-                          "To",
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                        const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Text(
+                            "To",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
                         ),
-                      ),
-                      Expanded(
-                        child: DatePicker(
-                          selectedDate: endDate,
-                          onDateSelected: _selectEndDate,
+                        Expanded(
+                          child: DatePicker(
+                            selectedDate: endDate,
+                            onDateSelected: _selectEndDate,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  StatsAndCalender(
-                    subjectId: widget.subjectId,
-                    startDate: startDate,
-                    endDate: endDate,
-                  ),
-                  const SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      ButtonTextPrimary(
-                        text: "Add Today's",
-                        onPressed: () {},
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ],
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    StatsAndCalender(
+                      subjectId: widget.subjectId,
+                      startDate: startDate,
+                      endDate: endDate,
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.bluetooth_audio),
+        onPressed: () {},
       ),
     );
   }

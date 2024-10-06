@@ -3,6 +3,7 @@ import 'package:attendance_app/src/models/subject.teacher.model.dart';
 import 'package:attendance_app/src/services/api/api.dart';
 import 'package:attendance_app/src/views/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class SubjectsList extends StatefulWidget {
   @override
@@ -62,7 +63,9 @@ class _SubjectsListState extends State<SubjectsList> {
                   return CardSubject(
                     title: subjects[index].course![0].name!.toUpperCase(),
                     subtitle: "Subject: ${subjects[index].name!}",
-                    onPressed: () {},
+                    onPressed: () {
+                      context.go("/teacher/attendance/${subjects[index].sId}", extra: subjects[index]);
+                    },
                   );
                 },
               );
