@@ -2,10 +2,14 @@ import 'package:attendance_app/src/models/subject.student.model.dart';
 import 'package:attendance_app/src/views/screens/student/attendance/stats_and_calender.dart';
 import 'package:attendance_app/src/views/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class AttendanceStudent extends StatefulWidget {
-  const AttendanceStudent(
-      {super.key, required this.subjectId, required this.subject});
+  const AttendanceStudent({
+    super.key,
+    required this.subjectId,
+    required this.subject,
+  });
 
   final String subjectId;
   final SubjectStudentModel subject;
@@ -105,7 +109,12 @@ class _AttendanceStudentState extends State<AttendanceStudent> {
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.bluetooth_audio),
-        onPressed: () {},
+        onPressed: () {
+          context.go(
+            "/student/bluetooth",
+            extra: widget.subject,
+          );
+        },
       ),
     );
   }

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:attendance_app/src/models/api_response.dart';
+import 'package:attendance_app/src/models/is_teacher_present.model.dart';
 import 'package:attendance_app/src/models/student.model.dart';
 import 'package:attendance_app/src/models/subject.student.model.dart';
 import 'package:attendance_app/src/models/subject_attendance.model.dart';
@@ -68,7 +69,8 @@ class Student {
     }
   }
 
-  Future<ApiResponse<List<SubjectAttendanceModel>>> getSubjectAttendance(String subjectId, DateTime startDate, DateTime endDate) async {
+  Future<ApiResponse<List<SubjectAttendanceModel>>> getSubjectAttendance(
+      String subjectId, DateTime startDate, DateTime endDate) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final String token = prefs.getString("token") ?? "";
 
@@ -107,7 +109,46 @@ class Student {
     }
   }
 
-  isTeacherPresent() async {}
+  Future<ApiResponse<IsTeacherPresentModel>> isTeacherPresent(
+    DateTime date,
+    String facultyId,
+    String subjectId,
+  ) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String token = prefs.getString("token") ?? "";
+
+    Map<String, dynamic> body = {
+      "date": date.toIso8601String(),
+      "facultyId": facultyId,
+      "subjectId": subjectId,
+    };
+
+    try {
+      final response = await http.post(
+        Uri.parse("$url/attendance/faculty/check"),
+        headers: <String, String>{
+          "Authorization": "Bearer $token",
+          "Content-Type": "application/json; charset=UTF-8",
+        },
+        body: jsonEncode(body),
+      );
+
+      final responseData = jsonDecode(response.body.toString());
+
+      if (response.statusCode == 200) {
+        return ApiResponse<IsTeacherPresentModel>.fromJson(
+          responseData,
+          (data) => IsTeacherPresentModel.fromJson(data),
+        );
+      } else {
+        throw Exception(
+          "${responseData["message"]}",
+        );
+      }
+    } catch (e) {
+      throw Exception('Error occurred getting teacher: $e');
+    }
+  }
 
   markTodaysAttendance() async {}
 }

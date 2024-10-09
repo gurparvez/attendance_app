@@ -13,7 +13,8 @@ class SubjectStudentModel {
     return SubjectStudentModel(
       id: json['_id'],
       name: json['name'],
-      faculty: json['faculty'] != null ? Faculty.fromJson(json['faculty']) : null,
+      faculty:
+          json['faculty'] != null ? Faculty.fromJson(json['faculty']) : null,
     );
   }
 
@@ -37,16 +38,17 @@ class Faculty {
   String? _updatedAt;
   int? _iV;
 
-  Faculty(
-      {String? sId,
-        String? auid,
-        String? name,
-        String? email,
-        String? role,
-        String? departmentId,
-        String? createdAt,
-        String? updatedAt,
-        int? iV}) {
+  Faculty({
+    String? sId,
+    String? auid,
+    String? name,
+    String? email,
+    String? role,
+    String? departmentId,
+    String? createdAt,
+    String? updatedAt,
+    int? iV,
+  }) {
     if (sId != null) {
       _sId = sId;
     }

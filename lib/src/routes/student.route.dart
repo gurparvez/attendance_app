@@ -34,6 +34,29 @@ final GoRoute studentRoutes = GoRoute(
         );
       },
     ),
+    GoRoute(
+      path: "bluetooth",
+      pageBuilder: (context, state) {
+        final subject = state.extra as SubjectStudentModel;
 
+        return CustomTransitionPage(
+          child: Bluetooth(subject: subject),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            // Slide transition from bottom-right to center
+            const begin = Offset(1.0, 1.0); // Bottom-right corner
+            const end = Offset.zero; // Center of the screen
+            const curve = Curves.easeInOut;
+
+            var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+            var offsetAnimation = animation.drive(tween);
+
+            return SlideTransition(
+              position: offsetAnimation,
+              child: child,
+            );
+          },
+        );
+      },
+    )
   ],
 );
