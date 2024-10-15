@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:attendance_app/src/models/api_response.dart';
 import 'package:attendance_app/src/models/is_teacher_present.model.dart';
+import 'package:attendance_app/src/models/mark_student_attendance.model.dart';
 import 'package:attendance_app/src/models/student.model.dart';
 import 'package:attendance_app/src/models/subject.student.model.dart';
 import 'package:attendance_app/src/models/subject_attendance.model.dart';
@@ -150,43 +151,40 @@ class Student {
     }
   }
 
-  // Future<ApiResponse<MarkTodaysAttendanceModel>> markTodaysAttendance(
-  //   String subjectId,
-  //   String teacherId,
-  // ) async {
-  //   final SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   final String token = prefs.getString("token") ?? "";
-  //
-  //   Map<String, dynamic> body = {
-  //     "subjectId": subjectId,
-  //     "teacherId": teacherId,
-  //     "date": DateTime.now().toIso8601String(),
-  //   };
-  //
-  //   try {
-  //     final response = await http.post(
-  //       Uri.parse("$url/api/v1/attendance/mark"),
-  //       headers: <String, String>{
-  //         "Authorization": "Bearer $token",
-  //         "Content-Type": "application/json; charset=UTF-8",
-  //       },
-  //       body: jsonEncode(body),
-  //     );
-  //
-  //     final responseData = jsonDecode(response.body.toString());
-  //
-  //     if (responseData["success"] == true) {
-  //       return ApiResponse<MarkTodaysAttendanceModel>.fromJson(
-  //         responseData,
-  //         (data) => MarkTodaysAttendanceModel.fromJson(data),
-  //       );
-  //     } else {
-  //       throw Exception(
-  //         "${responseData["message"]}",
-  //       );
-  //     }
-  //   } catch (e) {
-  //     throw Exception("Error occurred marking today's attendance: $e");
-  //   }
-  // }
+  Future<ApiResponse<MarkStudentAttendanceModel>> markTodaysAttendance(
+    String subjectId,
+  ) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String token = prefs.getString("token") ?? "";
+
+    Map<String, dynamic> body = {
+      "subjectId": subjectId,
+    };
+
+    try {
+      final response = await http.post(
+        Uri.parse("$url/api/v1/attendance/mark"),
+        headers: <String, String>{
+          "Authorization": "Bearer $token",
+          "Content-Type": "application/json; charset=UTF-8",
+        },
+        body: jsonEncode(body),
+      );
+
+      final responseData = jsonDecode(response.body.toString());
+
+      if (responseData["success"] == true) {
+        return ApiResponse<MarkStudentAttendanceModel>.fromJson(
+          responseData,
+          (data) => MarkStudentAttendanceModel.fromJson(data),
+        );
+      } else {
+        throw Exception(
+          "${responseData["message"]}",
+        );
+      }
+    } catch (e) {
+      throw Exception("Error occurred marking today's attendance: $e");
+    }
+  }
 }

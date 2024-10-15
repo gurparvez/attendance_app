@@ -1,5 +1,4 @@
-import 'package:attendance_app/src/models/subject.teacher.model.dart';
-import 'package:attendance_app/src/views/screens/student/bluetooth/bluetooth_error.dart';
+import 'package:attendance_app/src/models/subject_teacher.model.dart';
 import 'package:attendance_app/src/views/screens/teacher/attendance/attendance_teacher.dart';
 import 'package:attendance_app/src/views/screens/teacher/bluetooth/bluetooth.dart';
 import 'package:attendance_app/src/views/screens/teacher/home/teacher.dart';

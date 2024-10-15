@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:attendance_app/src/models/api_response.dart';
 import 'package:attendance_app/src/models/mark_faculty_attendance.model.dart';
-import 'package:attendance_app/src/models/subject.teacher.model.dart';
+import 'package:attendance_app/src/models/subject_teacher.model.dart';
 import 'package:attendance_app/src/services/api/api.dart';
 import 'package:attendance_app/src/views/widgets/widgets.dart';
 import 'package:flutter/material.dart';
@@ -46,7 +46,7 @@ class _BluetoothState extends State<Bluetooth> {
     });
   }
 
-  _markAttendance() async {
+  void _markAttendance() async {
     setState(() {
       _isLoading = true;
       _responseError = "";
@@ -61,7 +61,7 @@ class _BluetoothState extends State<Bluetooth> {
               );
       if (response.success) {
         debugPrint("Attendance marked");
-        _requestPermissionsAndStartDiscovery();
+        _requestPermissionsAndStartAdvertisement();
       }
     } catch (e) {
       setState(() {
@@ -75,7 +75,7 @@ class _BluetoothState extends State<Bluetooth> {
     }
   }
 
-  Future<void> _requestPermissionsAndStartDiscovery() async {
+  Future<void> _requestPermissionsAndStartAdvertisement() async {
     final goRouter = GoRouter.of(context);
     Map<Permission, PermissionStatus> statuses = await [
       Permission.bluetooth,

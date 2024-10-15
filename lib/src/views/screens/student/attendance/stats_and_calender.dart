@@ -97,7 +97,7 @@ class _StatsAndCalenderState extends State<StatsAndCalender> {
                       cardStat("Classes", "$totalClasses"),
                       cardStat("Present", "$presentClasses"),
                       cardStat("Absent", "$absentClasses"),
-                      cardStat("Attendance", "$percentage %"),
+                      cardStat("Attendance", "${percentage.toStringAsFixed(2)} %"),
                     ],
                   ),
                   const SizedBox(height: 20),

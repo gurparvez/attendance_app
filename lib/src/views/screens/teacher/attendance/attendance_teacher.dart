@@ -1,7 +1,7 @@
 import 'package:attendance_app/src/models/api_response.dart';
 import 'package:attendance_app/src/models/change_attendance.model.dart';
 import 'package:attendance_app/src/models/students_attendance.model.dart';
-import 'package:attendance_app/src/models/subject.teacher.model.dart';
+import 'package:attendance_app/src/models/subject_teacher.model.dart';
 import 'package:attendance_app/src/services/api/api.dart';
 import 'package:attendance_app/src/views/widgets/widgets.dart';
 import 'package:flutter/material.dart';

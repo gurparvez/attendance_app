@@ -26,7 +26,6 @@ class _AttendanceStudentState extends State<AttendanceStudent> {
     setState(() {
       startDate = date;
     });
-    debugPrint("$startDate");
   }
 
   void _selectEndDate(DateTime date) {
