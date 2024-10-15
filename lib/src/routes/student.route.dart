@@ -1,5 +1,6 @@
 import 'package:attendance_app/src/models/subject.student.model.dart';
 import 'package:attendance_app/src/views/screens/screens.dart';
+import 'package:attendance_app/src/views/widgets/widgets.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 
@@ -47,7 +48,8 @@ final GoRoute studentRoutes = GoRoute(
             const end = Offset.zero; // Center of the screen
             const curve = Curves.easeInOut;
 
-            var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+            var tween =
+                Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
             var offsetAnimation = animation.drive(tween);
 
             return SlideTransition(
@@ -57,6 +59,17 @@ final GoRoute studentRoutes = GoRoute(
           },
         );
       },
+      routes: [
+        GoRoute(
+          path: "error",
+          builder: (context, state) => FullScreenError(
+            message: state.extra as String,
+            onTryAgain: () {
+              context.go("/student/bluetooth");
+            },
+          ),
+        ),
+      ],
     )
   ],
 );

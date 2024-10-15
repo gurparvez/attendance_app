@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:attendance_app/src/models/api_response.dart';
+import 'package:attendance_app/src/models/change_attendance.model.dart';
 import 'package:attendance_app/src/models/students_attendance.model.dart';
 import 'package:attendance_app/src/models/subject.teacher.model.dart';
 import 'package:attendance_app/src/models/teacher.model.dart';
@@ -26,7 +27,7 @@ class Teacher {
 
       final responseData = jsonDecode(response.body.toString());
 
-      if (response.statusCode == 200) {
+      if (responseData["success"] == true) {
         return ApiResponse<TeacherModel>.fromJson(
           responseData,
           (data) => TeacherModel.fromJson(data),
@@ -54,7 +55,7 @@ class Teacher {
 
       final responseData = jsonDecode(response.body.toString());
 
-      if (response.statusCode == 200) {
+      if (responseData["success"] == true) {
         return ApiResponse<List<SubjectTeacherModel>>.fromJson(
           responseData,
           (data) => (data as List)
@@ -97,7 +98,7 @@ class Teacher {
 
       final responseData = jsonDecode(response.body.toString());
 
-      if (response.statusCode == 200) {
+      if (responseData["success"] == true) {
         return ApiResponse<List<StudentsAttendanceModel>>.fromJson(
           responseData,
           (data) => (data as List)
@@ -115,7 +116,11 @@ class Teacher {
     }
   }
 
-  unmarkAttendance(String subjectId, DateTime date, String studentId) async {
+  Future<ApiResponse<ChangeAttendanceModel>> markAttendance(
+    String subjectId,
+    DateTime date,
+    String studentId,
+  ) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final String token = prefs.getString("token") ?? "";
 
@@ -127,7 +132,7 @@ class Teacher {
 
     try {
       final response = await http.post(
-        Uri.parse("$url/attendance/subject"),
+        Uri.parse("$url/attendance"),
         headers: <String, String>{
           "Authorization": "Bearer $token",
           "Content-Type": "application/json",
@@ -137,12 +142,10 @@ class Teacher {
 
       final responseData = jsonDecode(response.body.toString());
 
-      if (response.statusCode == 200) {
-        return ApiResponse<List<StudentsAttendanceModel>>.fromJson(
+      if (responseData["success"] == true) {
+        return ApiResponse<ChangeAttendanceModel>.fromJson(
           responseData,
-              (data) => (data as List)
-              .map((item) => StudentsAttendanceModel.fromJson(item))
-              .toList(),
+          (data) => ChangeAttendanceModel.fromJson(data),
         );
       } else {
         debugPrint("$responseData");
@@ -151,7 +154,49 @@ class Teacher {
         );
       }
     } catch (e) {
-      throw Exception('Error occurred while getting students: $e');
+      throw Exception('Error occurred while marking: $e');
+    }
+  }
+
+  Future<ApiResponse<ChangeAttendanceModel>> unmarkAttendance(
+    String subjectId,
+    DateTime date,
+    String studentId,
+  ) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String token = prefs.getString("token") ?? "";
+
+    Map<String, dynamic> body = {
+      "studentId": studentId,
+      "subjectId": subjectId,
+      "date": DateFormat('yyyy-MM-dd').format(date),
+    };
+
+    try {
+      final response = await http.delete(
+        Uri.parse("$url/attendance/unmark"),
+        headers: <String, String>{
+          "Authorization": "Bearer $token",
+          "Content-Type": "application/json",
+        },
+        body: jsonEncode(body),
+      );
+
+      final responseData = jsonDecode(response.body.toString());
+
+      if (responseData["success"] == true) {
+        return ApiResponse<ChangeAttendanceModel>.fromJson(
+          responseData,
+          (data) => ChangeAttendanceModel.fromJson(data),
+        );
+      } else {
+        debugPrint("$responseData");
+        throw Exception(
+          "${responseData["message"]}",
+        );
+      }
+    } catch (e) {
+      throw Exception('Error occurred while unmarking: $e');
     }
   }
 }

@@ -8,15 +8,16 @@ class SubjectTeacherModel {
   int? _iV;
   List<Course>? _course;
 
-  SubjectTeacherModel(
-      {String? sId,
-        String? name,
-        String? courseId,
-        String? facultyId,
-        String? createdAt,
-        String? updatedAt,
-        int? iV,
-        List<Course>? course}) {
+  SubjectTeacherModel({
+    String? sId,
+    String? name,
+    String? courseId,
+    String? facultyId,
+    String? createdAt,
+    String? updatedAt,
+    int? iV,
+    List<Course>? course,
+  }) {
     if (sId != null) {
       _sId = sId;
     }
@@ -103,12 +104,12 @@ class Course {
 
   Course(
       {String? sId,
-        String? name,
-        int? semester,
-        String? departmentId,
-        String? createdAt,
-        String? updatedAt,
-        int? iV}) {
+      String? name,
+      int? semester,
+      String? departmentId,
+      String? createdAt,
+      String? updatedAt,
+      int? iV}) {
     if (sId != null) {
       _sId = sId;
     }

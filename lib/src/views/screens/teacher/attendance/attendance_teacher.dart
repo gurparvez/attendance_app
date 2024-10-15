@@ -1,13 +1,18 @@
 import 'package:attendance_app/src/models/api_response.dart';
+import 'package:attendance_app/src/models/change_attendance.model.dart';
 import 'package:attendance_app/src/models/students_attendance.model.dart';
 import 'package:attendance_app/src/models/subject.teacher.model.dart';
 import 'package:attendance_app/src/services/api/api.dart';
 import 'package:attendance_app/src/views/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class AttendanceTeacher extends StatefulWidget {
-  const AttendanceTeacher(
-      {super.key, required this.subjectId, required this.subject});
+  const AttendanceTeacher({
+    super.key,
+    required this.subjectId,
+    required this.subject,
+  });
 
   final String subjectId;
   final SubjectTeacherModel subject;
@@ -19,7 +24,9 @@ class AttendanceTeacher extends StatefulWidget {
 class _AttendanceTeacherState extends State<AttendanceTeacher> {
   bool _isLoading = false;
   String _responseError = "";
-  DateTime date = DateTime.parse("2024-10-02");
+  bool _isLoadingAttendance = false;
+  String _responseErrorAttendance = "";
+  DateTime date = DateTime.now();
   StudentsAttendanceModel studentsList = StudentsAttendanceModel();
 
   @override
@@ -28,17 +35,20 @@ class _AttendanceTeacherState extends State<AttendanceTeacher> {
     super.initState();
   }
 
-  void _selectDate(DateTime date) {
+  void _selectDate(DateTime newDate) {
     setState(() {
-      date = date;
+      date = newDate;
     });
+    _getAttendance();
   }
 
-  void _getAttendance() async {
-    setState(() {
-      _isLoading = true;
-      _responseError = "";
-    });
+  void _getAttendance({bool showFullLoader = true}) async {
+    if (showFullLoader) {
+      setState(() {
+        _isLoading = true;
+        _responseError = "";
+      });
+    }
     try {
       debugPrint("getting students list of subject: ${widget.subjectId}...");
       ApiResponse<List<StudentsAttendanceModel>> studentsListResponse =
@@ -56,6 +66,95 @@ class _AttendanceTeacherState extends State<AttendanceTeacher> {
     } finally {
       setState(() {
         _isLoading = false;
+      });
+    }
+  }
+
+  void _markAttendance(
+    DateTime date,
+    String subjectId,
+    String studentId,
+  ) async {
+    setState(() {
+      _isLoadingAttendance = true;
+    });
+    try {
+      debugPrint("marking attendance...");
+      ApiResponse<ChangeAttendanceModel> response =
+          await Api().teacher.markAttendance(subjectId, date, studentId);
+      if (response.success) {
+        _getUpdatedStudentAttendance(studentId, date);
+      }
+    } catch (e) {
+      setState(() {
+        _responseErrorAttendance = "$e";
+        debugPrint(e.toString());
+      });
+    } finally {
+      setState(() {
+        _isLoadingAttendance = false;
+      });
+    }
+  }
+
+  void _unMarkAttendance(
+    DateTime date,
+    String subjectId,
+    String studentId,
+  ) async {
+    setState(() {
+      _isLoadingAttendance = true;
+    });
+    try {
+      debugPrint("marking attendance...");
+      ApiResponse<ChangeAttendanceModel> response =
+          await Api().teacher.unmarkAttendance(subjectId, date, studentId);
+      if (response.success) {
+        _getUpdatedStudentAttendance(studentId, date);
+      }
+    } catch (e) {
+      setState(() {
+        _responseErrorAttendance = "$e";
+        debugPrint(e.toString());
+      });
+    } finally {
+      setState(() {
+        _isLoadingAttendance = false;
+      });
+    }
+  }
+
+  void _getUpdatedStudentAttendance(String studentId, DateTime date) async {
+    setState(() {
+      _isLoadingAttendance = true;
+    });
+    try {
+      ApiResponse<List<StudentsAttendanceModel>> response =
+          await Api().teacher.getSubjectAttendance(widget.subjectId, date);
+
+      if (response.success && response.data.isNotEmpty) {
+        StudentsAttendanceModel updatedData = response.data[0];
+
+        // Update the student's attendance
+        final updatedStudent = updatedData.students!.firstWhere(
+          (student) => student.user?.sId == studentId,
+        );
+        final index = studentsList.students!.indexWhere(
+              (student) => student.user?.sId == studentId,
+        );
+        if (index != -1) {
+          setState(() {
+            studentsList.students![index].present = updatedStudent.present;
+          });
+        }
+      }
+    } catch (e) {
+      setState(() {
+        _responseErrorAttendance = "$e";
+      });
+    } finally {
+      setState(() {
+        _isLoadingAttendance = false;
       });
     }
   }
@@ -117,19 +216,34 @@ class _AttendanceTeacherState extends State<AttendanceTeacher> {
                                       Icons.check,
                                       color: Colors.green,
                                     )
-                                  : const Icon(Icons.close, color: Colors.red),
+                                  : const Icon(
+                                      Icons.close,
+                                      color: Colors.red,
+                                    ),
                               title: Text(student.user!.name!),
                               subtitle: Text(student.user!.auid!),
                               trailing: student.present!
                                   ? ButtonTextSecondary(
                                       text: "UnMark",
-                                      isLoading: _isLoading,
-                                      onPressed: () {},
+                                      isLoading: _isLoadingAttendance,
+                                      onPressed: () {
+                                        _unMarkAttendance(
+                                          date,
+                                          widget.subjectId,
+                                          student.user!.sId!,
+                                        );
+                                      },
                                     )
                                   : ButtonTextPrimary(
                                       text: "Mark",
-                                      isLoading: _isLoading,
-                                      onPressed: () {},
+                                      isLoading: _isLoadingAttendance,
+                                      onPressed: () {
+                                        _markAttendance(
+                                          date,
+                                          widget.subjectId,
+                                          student.user!.sId!,
+                                        );
+                                      },
                                     ),
                             );
                           },
@@ -139,7 +253,9 @@ class _AttendanceTeacherState extends State<AttendanceTeacher> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          context.go("/teacher/bluetooth", extra: widget.subject);
+        },
         child: const Icon(Icons.bluetooth_audio),
       ),
     );
