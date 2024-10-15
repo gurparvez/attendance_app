@@ -1,10 +1,19 @@
 import 'package:attendance_app/src/views/widgets/buttons/button_text_secondary.dart';
 import 'package:flutter/material.dart';
 
-class TeacherCheck extends StatelessWidget {
-  const TeacherCheck({super.key, required this.isLoading});
+class FullScreenSpinner extends StatelessWidget {
+  const FullScreenSpinner({
+    super.key,
+    required this.message,
+    this.onCancel = _removeCurrentPage,
+  });
 
-  final bool isLoading;
+  final String message;
+  final void Function(BuildContext context) onCancel;
+
+  static void _removeCurrentPage(BuildContext context) {
+    Navigator.pop(context);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -16,12 +25,10 @@ class TeacherCheck extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                isLoading
-                    ? CircularProgressIndicator()
-                    : const Text("Teacher is present"),
+                CircularProgressIndicator(),
                 SizedBox(height: 20),
                 Text(
-                  'Checking if Teacher is Present',
+                  message,
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w400,
@@ -35,9 +42,7 @@ class TeacherCheck extends StatelessWidget {
             padding: const EdgeInsets.only(bottom: 30.0),
             child: ButtonTextSecondary(
               text: "Cancel",
-              onPressed: () {
-                Navigator.pop(context);
-              },
+              onPressed: () => onCancel(context),
             ),
           ),
         ],

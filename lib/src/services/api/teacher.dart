@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:attendance_app/src/models/api_response.dart';
 import 'package:attendance_app/src/models/change_attendance.model.dart';
+import 'package:attendance_app/src/models/mark_faculty_attendance.model.dart';
 import 'package:attendance_app/src/models/students_attendance.model.dart';
 import 'package:attendance_app/src/models/subject.teacher.model.dart';
 import 'package:attendance_app/src/models/teacher.model.dart';
@@ -197,6 +198,48 @@ class Teacher {
       }
     } catch (e) {
       throw Exception('Error occurred while unmarking: $e');
+    }
+  }
+
+  Future<ApiResponse<MarkFacultyAttendanceModel>> markFacultyAttendance(
+    DateTime date,
+    String facultyId,
+    String subject,
+  ) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String token = prefs.getString("token") ?? "";
+
+    Map<String, dynamic> body = {
+      "date": DateFormat('yyyy-MM-dd').format(date),
+      "facultyId": facultyId,
+      "subjectId": subject,
+    };
+
+    try {
+      final response = await http.post(
+        Uri.parse("$url/attendance/faculty"),
+        headers: <String, String>{
+          "Authorization": "Bearer $token",
+          "Content-Type": "application/json",
+        },
+        body: jsonEncode(body),
+      );
+
+      final responseData = jsonDecode(response.body.toString());
+
+      if (responseData["success"] == true) {
+        return ApiResponse<MarkFacultyAttendanceModel>.fromJson(
+          responseData,
+          (data) => MarkFacultyAttendanceModel.fromJson(data),
+        );
+      } else {
+        debugPrint("$responseData");
+        throw Exception(
+          "${responseData["message"]}",
+        );
+      }
+    } catch (e) {
+      throw Exception('Error occurred while marking: $e');
     }
   }
 }
