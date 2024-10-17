@@ -7,6 +7,7 @@ import 'package:attendance_app/src/models/subject.student.model.dart';
 import 'package:attendance_app/src/models/subject_attendance.model.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Student {
@@ -119,7 +120,7 @@ class Student {
     final String token = prefs.getString("token") ?? "";
 
     Map<String, dynamic> body = {
-      "date": date.toIso8601String(),
+      "date": DateFormat('yyyy-MM-dd').format(date),
       "facultyId": facultyId,
       "subjectId": subjectId,
     };

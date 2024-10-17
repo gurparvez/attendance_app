@@ -32,17 +32,25 @@ class _BluetoothState extends State<Bluetooth> {
     _markAttendance();
   }
 
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
   void _startTimer() {
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      setState(() {
-        if (_timeRemaining > 0) {
-          debugPrint("Time remaining: $_timeRemaining");
-          _timeRemaining--;
-        } else {
-          timer.cancel();
-          Navigator.pop(context);
-        }
-      });
+      if (mounted) {
+        setState(() {
+          if (_timeRemaining > 0) {
+            debugPrint("Time remaining: $_timeRemaining");
+            _timeRemaining--;
+          } else {
+            timer.cancel();
+            Navigator.pop(context);
+          }
+        });
+      }
     });
   }
 
@@ -68,6 +76,12 @@ class _BluetoothState extends State<Bluetooth> {
         _responseError = "$e";
         debugPrint(e.toString());
       });
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        context.go(
+          "/student/bluetooth/error",
+          extra: _responseError,
+        );
+      });
     } finally {
       setState(() {
         _isLoading = false;
@@ -80,7 +94,9 @@ class _BluetoothState extends State<Bluetooth> {
     Map<Permission, PermissionStatus> statuses = await [
       Permission.bluetooth,
       Permission.bluetoothScan,
-      Permission.locationWhenInUse,
+      Permission.bluetoothAdvertise,
+      Permission.location,
+      Permission.nearbyWifiDevices,
     ].request();
 
     bool allGranted = statuses.values.every((status) => status.isGranted);
@@ -126,9 +142,6 @@ class _BluetoothState extends State<Bluetooth> {
     if (_isLoading) {
       return const FullScreenSpinner(message: "Marking your attendance");
     }
-    if (_responseError.isNotEmpty) {
-      context.go("/student/bluetooth/error", extra: _responseError);
-    }
     return Scaffold(
       body: Column(
         children: [
@@ -147,7 +160,8 @@ class _BluetoothState extends State<Bluetooth> {
             padding: const EdgeInsets.only(bottom: 30.0),
             child: ButtonTextSecondary(
               text: "Cancel",
-              onPressed: () {
+              onPressed: () async {
+                await Nearby().stopAdvertising();
                 Navigator.pop(context);
               },
             ),

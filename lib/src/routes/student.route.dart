@@ -59,17 +59,15 @@ final GoRoute studentRoutes = GoRoute(
           },
         );
       },
-      routes: [
-        GoRoute(
-          path: "error",
-          builder: (context, state) => FullScreenError(
-            message: state.extra as String,
-            onTryAgain: () {
-              context.go("/student/bluetooth");
-            },
-          ),
-        ),
-      ],
-    )
+    ),
+    GoRoute(
+      path: "bluetooth/error",
+      builder: (context, state) => FullScreenError(
+        message: state.extra as String,
+        onTryAgain: () {
+          context.go("/student");
+        },
+      ),
+    ),
   ],
 );

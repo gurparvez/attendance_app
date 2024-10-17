@@ -13,6 +13,7 @@ class FullScreenError extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint("ON ERROR page");
     return Scaffold(
       body: Column(
         children: [

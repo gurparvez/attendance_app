@@ -9,7 +9,8 @@ import 'package:attendance_app/src/views/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nearby_connections/nearby_connections.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'package:permission_handler/permission_handler.dart' as permissionHandler;
+import 'package:location/location.dart' as locationHandler;
 
 class Bluetooth extends StatefulWidget {
   const Bluetooth({super.key, required this.subject});
@@ -44,17 +45,25 @@ class _BluetoothState extends State<Bluetooth> {
     super.initState();
   }
 
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
   void _startTimer() {
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      setState(() {
-        if (_timeRemaining > 0) {
-          debugPrint("Time remaining: $_timeRemaining");
-          _timeRemaining--;
-        } else {
-          timer.cancel();
-          Navigator.pop(context);
-        }
-      });
+      if (mounted) {
+        setState(() {
+          if (_timeRemaining > 0) {
+            debugPrint("Time remaining: $_timeRemaining");
+            _timeRemaining--;
+          } else {
+            timer.cancel();
+            Navigator.pop(context);
+          }
+        });
+      }
     });
   }
 
@@ -88,15 +97,34 @@ class _BluetoothState extends State<Bluetooth> {
 
   Future<void> _requestPermissionsAndStartDiscovery() async {
     final goRouter = GoRouter.of(context);
-    Map<Permission, PermissionStatus> statuses = await [
-      Permission.bluetooth,
-      Permission.bluetoothScan,
-      Permission.locationWhenInUse,
+    locationHandler.Location location = locationHandler.Location();
+
+    // Check if location service is enabled; if not, request to enable it
+    bool serviceEnabled = await location.serviceEnabled();
+    if (!serviceEnabled) {
+      serviceEnabled = await location.requestService();
+      if (!serviceEnabled) {
+        debugPrint('Location service is disabled. Cannot start discovery.');
+        return;
+      }
+    }
+
+    // Request all required permissions using the permission handler alias
+    Map<permissionHandler.Permission, permissionHandler.PermissionStatus>
+    statuses = await [
+      permissionHandler.Permission.bluetooth,
+      permissionHandler.Permission.bluetoothScan,
+      permissionHandler.Permission.bluetoothAdvertise,
+      permissionHandler.Permission.bluetoothConnect,
+      permissionHandler.Permission.nearbyWifiDevices,
+      permissionHandler.Permission.location,
     ].request();
 
+    // Check if all permissions are granted
     bool allGranted = statuses.values.every((status) => status.isGranted);
 
     if (allGranted) {
+      debugPrint("All permissions granted. Starting discovery.");
       _startDiscovery();
       _startTimer();
     } else {
@@ -155,6 +183,12 @@ class _BluetoothState extends State<Bluetooth> {
         _responseErrorMarkingAttendance = "$e";
         debugPrint(e.toString());
       });
+      // WidgetsBinding.instance.addPostFrameCallback((_) {
+      //   context.go(
+      //     "/student/bluetooth/error",
+      //     extra: _responseErrorTeacherPresent,
+      //   );
+      // });
     } finally {
       _isLoadingMarkingAttendance = false;
     }
@@ -166,10 +200,12 @@ class _BluetoothState extends State<Bluetooth> {
       return const FullScreenSpinner(message: "Checking if teacher is present");
     }
     if (_responseErrorTeacherPresent.isNotEmpty && !_isLoadingTeacherPresent) {
-      context.go(
-        "/student/bluetooth/error",
-        extra: _responseErrorTeacherPresent,
-      );
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        context.go(
+          "/student/bluetooth/error",
+          extra: _responseErrorTeacherPresent,
+        );
+      });
     }
 
     if (_isLoadingMarkingAttendance) {
@@ -177,10 +213,12 @@ class _BluetoothState extends State<Bluetooth> {
     }
     if (_responseErrorMarkingAttendance.isNotEmpty &&
         !_isLoadingMarkingAttendance) {
-      context.go(
-        "/student/bluetooth/error",
-        extra: _responseErrorMarkingAttendance,
-      );
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        context.go(
+          "/student/bluetooth/error",
+          extra: _responseErrorMarkingAttendance,
+        );
+      });
     }
 
     if (_isAttendanceMarked) {
@@ -210,7 +248,8 @@ class _BluetoothState extends State<Bluetooth> {
             padding: const EdgeInsets.only(bottom: 30.0),
             child: ButtonTextSecondary(
               text: "Cancel",
-              onPressed: () {
+              onPressed: () async {
+                await Nearby().stopDiscovery();
                 Navigator.pop(context);
               },
             ),

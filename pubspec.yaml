@@ -21,6 +21,7 @@ dependencies:
   intl: ^0.19.0
   nearby_connections: ^4.1.1
   permission_handler: ^11.3.1
+  location: ^6.0.2
 
 dev_dependencies:
   flutter_test:
