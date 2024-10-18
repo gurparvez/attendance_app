@@ -28,7 +28,7 @@ class FullScreenSuccess extends StatelessWidget {
                     color:
                     Theme.of(context).colorScheme.primary.withOpacity(0.3),
                   ),
-                  child: const Icon(Icons.close, size: 48),
+                  child: const Icon(Icons.check, size: 48),
                 ),
                 const SizedBox(height: 20),
                 Text(

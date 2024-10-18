@@ -164,7 +164,7 @@ class Student {
 
     try {
       final response = await http.post(
-        Uri.parse("$url/api/v1/attendance/mark"),
+        Uri.parse("$url/attendance/today"),
         headers: <String, String>{
           "Authorization": "Bearer $token",
           "Content-Type": "application/json; charset=UTF-8",

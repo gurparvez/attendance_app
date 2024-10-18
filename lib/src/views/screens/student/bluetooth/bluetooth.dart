@@ -46,8 +46,9 @@ class _BluetoothState extends State<Bluetooth> {
   }
 
   @override
-  void dispose() {
+  void dispose() async {
     _timer?.cancel();
+    await Nearby().stopDiscovery();
     super.dispose();
   }
 
@@ -183,12 +184,6 @@ class _BluetoothState extends State<Bluetooth> {
         _responseErrorMarkingAttendance = "$e";
         debugPrint(e.toString());
       });
-      // WidgetsBinding.instance.addPostFrameCallback((_) {
-      //   context.go(
-      //     "/student/bluetooth/error",
-      //     extra: _responseErrorTeacherPresent,
-      //   );
-      // });
     } finally {
       _isLoadingMarkingAttendance = false;
     }
@@ -248,8 +243,7 @@ class _BluetoothState extends State<Bluetooth> {
             padding: const EdgeInsets.only(bottom: 30.0),
             child: ButtonTextSecondary(
               text: "Cancel",
-              onPressed: () async {
-                await Nearby().stopDiscovery();
+              onPressed: () {
                 Navigator.pop(context);
               },
             ),

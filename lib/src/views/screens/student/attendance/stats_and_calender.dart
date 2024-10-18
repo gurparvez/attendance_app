@@ -40,8 +40,9 @@ class _StatsAndCalenderState extends State<StatsAndCalender> {
   void didUpdateWidget(StatsAndCalender oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    if (widget.startDate != oldWidget.startDate || widget.endDate != oldWidget.endDate) {
-      _getAttendanceData();  // Fetch new data
+    if (widget.startDate != oldWidget.startDate ||
+        widget.endDate != oldWidget.endDate) {
+      _getAttendanceData(); // Fetch new data
     }
   }
 
@@ -94,10 +95,15 @@ class _StatsAndCalenderState extends State<StatsAndCalender> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      cardStat("Classes", "$totalClasses"),
-                      cardStat("Present", "$presentClasses"),
-                      cardStat("Absent", "$absentClasses"),
-                      cardStat("Attendance", "${percentage.toStringAsFixed(2)} %"),
+                      Expanded(child: cardStat("Classes", "$totalClasses")),
+                      Expanded(child: cardStat("Present", "$presentClasses")),
+                      Expanded(child: cardStat("Absent", "$absentClasses")),
+                      Expanded(
+                        child: cardStat(
+                          "Attendance",
+                          "${percentage.toStringAsFixed(2)} %",
+                        ),
+                      ),
                     ],
                   ),
                   const SizedBox(height: 20),

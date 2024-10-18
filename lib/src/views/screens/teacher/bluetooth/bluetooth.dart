@@ -33,8 +33,9 @@ class _BluetoothState extends State<Bluetooth> {
   }
 
   @override
-  void dispose() {
+  void dispose() async {
     _timer?.cancel();
+    await Nearby().stopAdvertising();
     super.dispose();
   }
 
@@ -160,8 +161,7 @@ class _BluetoothState extends State<Bluetooth> {
             padding: const EdgeInsets.only(bottom: 30.0),
             child: ButtonTextSecondary(
               text: "Cancel",
-              onPressed: () async {
-                await Nearby().stopAdvertising();
+              onPressed: () {
                 Navigator.pop(context);
               },
             ),
