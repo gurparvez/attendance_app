@@ -6,6 +6,7 @@ import 'package:attendance_app/src/services/api/api.dart';
 import 'package:attendance_app/src/views/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class AttendanceTeacher extends StatefulWidget {
   const AttendanceTeacher({
@@ -140,7 +141,7 @@ class _AttendanceTeacherState extends State<AttendanceTeacher> {
           (student) => student.user?.sId == studentId,
         );
         final index = studentsList.students!.indexWhere(
-              (student) => student.user?.sId == studentId,
+          (student) => student.user?.sId == studentId,
         );
         if (index != -1) {
           setState(() {
@@ -161,6 +162,16 @@ class _AttendanceTeacherState extends State<AttendanceTeacher> {
 
   @override
   Widget build(BuildContext context) {
+    if (_responseErrorAttendance.isNotEmpty) {
+      Fluttertoast.showToast(
+        msg: _responseErrorAttendance,
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
+    }
     return Scaffold(
       appBar: AppBar(
         actions: <Widget>[
@@ -197,7 +208,38 @@ class _AttendanceTeacherState extends State<AttendanceTeacher> {
               onChanged: (value) {},
             ),
             const SizedBox(height: 20),
-            DatePicker(selectedDate: date, onDateSelected: _selectDate),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                DatePicker(selectedDate: date, onDateSelected: _selectDate),
+                if (studentsList.students != null && studentsList.students!.isNotEmpty) ...[
+                  Expanded(
+                    child: cardStat(
+                      "Total",
+                      studentsList.students!.length.toString(),
+                    ),
+                  ),
+                  Expanded(
+                    child: cardStat(
+                      "Present",
+                      studentsList.students!
+                          .where((student) => student.present!)
+                          .length
+                          .toString(),
+                    ),
+                  ),
+                  Expanded(
+                    child: cardStat(
+                      "Absent",
+                      studentsList.students!
+                          .where((student) => !student.present!)
+                          .length
+                          .toString(),
+                    ),
+                  ),
+                ]
+              ],
+            ),
             const SizedBox(height: 20),
             Expanded(
               child: _isLoading
