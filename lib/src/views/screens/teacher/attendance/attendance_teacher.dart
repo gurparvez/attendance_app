@@ -176,7 +176,9 @@ class _AttendanceTeacherState extends State<AttendanceTeacher> {
       appBar: AppBar(
         actions: <Widget>[
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              context.go("/teacher/profile");
+            },
             icon: const Icon(Icons.account_circle_outlined),
           ),
         ],

@@ -62,7 +62,9 @@ class _StudentHomeState extends ConsumerState<StudentHome> {
             appBar: AppBar(
               actions: <Widget>[
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    context.go("/student/profile");
+                  },
                   icon: const Icon(Icons.account_circle_outlined),
                 ),
               ],

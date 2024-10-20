@@ -61,7 +61,9 @@ class _HomeTeacherState extends ConsumerState<HomeTeacher> {
             appBar: AppBar(
               actions: <Widget>[
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    context.go("/teacher/profile");
+                  },
                   icon: const Icon(Icons.account_circle_outlined),
                 ),
               ],

@@ -40,7 +40,9 @@ class _AttendanceStudentState extends State<AttendanceStudent> {
       appBar: AppBar(
         actions: <Widget>[
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              context.go("/student/profile");
+            },
             icon: const Icon(Icons.account_circle_outlined),
           ),
         ],

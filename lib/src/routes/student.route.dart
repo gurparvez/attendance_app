@@ -36,6 +36,10 @@ final GoRoute studentRoutes = GoRoute(
       },
     ),
     GoRoute(
+      path: "profile",
+      builder: (context, state) => const ProfileStudent(),
+    ),
+    GoRoute(
       path: "bluetooth",
       pageBuilder: (context, state) {
         final subject = state.extra as SubjectStudentModel;
