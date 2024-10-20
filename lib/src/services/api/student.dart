@@ -26,7 +26,7 @@ class Student {
 
       final responseData = jsonDecode(response.body.toString());
 
-      if (response.statusCode == 200) {
+      if (responseData["success"]) {
         return ApiResponse<StudentModel>.fromJson(
           responseData,
           (data) => StudentModel.fromJson(data),
@@ -54,7 +54,7 @@ class Student {
 
       final responseData = jsonDecode(response.body.toString());
 
-      if (response.statusCode == 200) {
+      if (responseData["success"]) {
         return ApiResponse<List<SubjectStudentModel>>.fromJson(
           responseData,
           (data) => (data as List)
@@ -94,7 +94,7 @@ class Student {
 
       final responseData = jsonDecode(response.body.toString());
 
-      if (response.statusCode == 200) {
+      if (responseData["success"]) {
         return ApiResponse<List<SubjectAttendanceModel>>.fromJson(
           responseData,
           (data) => (data as List)
@@ -137,7 +137,7 @@ class Student {
 
       final responseData = jsonDecode(response.body.toString());
 
-      if (response.statusCode == 200) {
+      if (responseData["success"]) {
         return ApiResponse<IsTeacherPresentModel>.fromJson(
           responseData,
           (data) => IsTeacherPresentModel.fromJson(data),
@@ -174,7 +174,7 @@ class Student {
 
       final responseData = jsonDecode(response.body.toString());
 
-      if (responseData["success"] == true) {
+      if (responseData["success"]) {
         return ApiResponse<MarkStudentAttendanceModel>.fromJson(
           responseData,
           (data) => MarkStudentAttendanceModel.fromJson(data),

@@ -28,7 +28,7 @@ class Teacher {
 
       final responseData = jsonDecode(response.body.toString());
 
-      if (responseData["success"] == true) {
+      if (responseData["success"]) {
         return ApiResponse<TeacherModel>.fromJson(
           responseData,
           (data) => TeacherModel.fromJson(data),
@@ -39,7 +39,7 @@ class Teacher {
         );
       }
     } catch (e) {
-      throw Exception('Error occurred in getting user: $e');
+      throw Exception('$e');
     }
   }
 
@@ -56,7 +56,7 @@ class Teacher {
 
       final responseData = jsonDecode(response.body.toString());
 
-      if (responseData["success"] == true) {
+      if (responseData["success"]) {
         return ApiResponse<List<SubjectTeacherModel>>.fromJson(
           responseData,
           (data) => (data as List)
@@ -69,7 +69,7 @@ class Teacher {
         );
       }
     } catch (e) {
-      throw Exception('Error occurred while getting subjects: $e');
+      throw Exception('$e');
     }
   }
 
@@ -99,7 +99,7 @@ class Teacher {
 
       final responseData = jsonDecode(response.body.toString());
 
-      if (responseData["success"] == true) {
+      if (responseData["success"]) {
         return ApiResponse<List<StudentsAttendanceModel>>.fromJson(
           responseData,
           (data) => (data as List)
@@ -113,7 +113,7 @@ class Teacher {
         );
       }
     } catch (e) {
-      throw Exception('Error occurred while getting students: $e');
+      throw Exception('$e');
     }
   }
 
@@ -143,7 +143,7 @@ class Teacher {
 
       final responseData = jsonDecode(response.body.toString());
 
-      if (responseData["success"] == true) {
+      if (responseData["success"]) {
         return ApiResponse<ChangeAttendanceModel>.fromJson(
           responseData,
           (data) => ChangeAttendanceModel.fromJson(data),
@@ -155,7 +155,7 @@ class Teacher {
         );
       }
     } catch (e) {
-      throw Exception('Error occurred while marking: $e');
+      throw Exception('$e');
     }
   }
 
@@ -185,7 +185,7 @@ class Teacher {
 
       final responseData = jsonDecode(response.body.toString());
 
-      if (responseData["success"] == true) {
+      if (responseData["success"]) {
         return ApiResponse<ChangeAttendanceModel>.fromJson(
           responseData,
           (data) => ChangeAttendanceModel.fromJson(data),
@@ -197,7 +197,7 @@ class Teacher {
         );
       }
     } catch (e) {
-      throw Exception('Error occurred while unmarking: $e');
+      throw Exception('$e');
     }
   }
 
@@ -227,7 +227,7 @@ class Teacher {
 
       final responseData = jsonDecode(response.body.toString());
 
-      if (responseData["success"] == true) {
+      if (responseData["success"]) {
         return ApiResponse<MarkFacultyAttendanceModel>.fromJson(
           responseData,
           (data) => MarkFacultyAttendanceModel.fromJson(data),
@@ -239,7 +239,7 @@ class Teacher {
         );
       }
     } catch (e) {
-      throw Exception('Error occurred while marking: $e');
+      throw Exception('$e');
     }
   }
 }

@@ -20,7 +20,7 @@ class User {
 
       final responseData = jsonDecode(response.body.toString());
 
-      if (response.statusCode == 200) {
+      if (responseData["success"]) {
         return ApiResponse<UserModel>.fromJson(
           responseData,
           (data) => UserModel.fromJson(data),
