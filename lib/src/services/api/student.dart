@@ -37,7 +37,7 @@ class Student {
         );
       }
     } catch (e) {
-      throw Exception('Error occurred in getting user: $e');
+      throw Exception('$e');
     }
   }
 
@@ -67,7 +67,7 @@ class Student {
         );
       }
     } catch (e) {
-      throw Exception('Error occurred while getting subjects: $e');
+      throw Exception('$e');
     }
   }
 
@@ -107,7 +107,7 @@ class Student {
         );
       }
     } catch (e) {
-      throw Exception('Error occurred while getting attendance: $e');
+      throw Exception('$e');
     }
   }
 
@@ -148,7 +148,7 @@ class Student {
         );
       }
     } catch (e) {
-      throw Exception('Error occurred getting teacher: $e');
+      throw Exception('$e');
     }
   }
 
@@ -185,7 +185,7 @@ class Student {
         );
       }
     } catch (e) {
-      throw Exception("Error occurred marking today's attendance: $e");
+      throw Exception("$e");
     }
   }
 }

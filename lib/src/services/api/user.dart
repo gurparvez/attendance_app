@@ -31,7 +31,7 @@ class User {
         );
       }
     } catch (e) {
-      throw Exception('Error occurred during login: $e');
+      throw Exception('$e');
     }
   }
 
