@@ -1,19 +1,21 @@
 import 'package:attendance_app/src/models/api_response.dart';
 import 'package:attendance_app/src/models/user.model.dart';
+import 'package:attendance_app/src/providers/user_provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:attendance_app/src/services/api/api.dart';
 import 'package:attendance_app/src/views/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class LoginPage extends StatefulWidget {
+class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
 
   @override
-  _LoginPageState createState() => _LoginPageState();
+  ConsumerState<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageState extends ConsumerState<LoginPage> {
   Map<String, String> formData = {
     "auid": "",
     "password": "",
@@ -51,6 +53,8 @@ class _LoginPageState extends State<LoginPage> {
       if (response.success) {
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString("token", response.data.accessToken!);
+
+        ref.read(userProvider.notifier).setUser(response.data);
 
         final role = response.data.user!.role;
         if (role == "student") {

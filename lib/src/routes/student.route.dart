@@ -37,7 +37,7 @@ final GoRoute studentRoutes = GoRoute(
     ),
     GoRoute(
       path: "profile",
-      builder: (context, state) => const ProfileStudent(),
+      builder: (context, state) => const Profile(),
     ),
     GoRoute(
       path: "bluetooth",

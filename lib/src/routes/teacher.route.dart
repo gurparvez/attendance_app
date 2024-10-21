@@ -1,8 +1,8 @@
 import 'package:attendance_app/src/models/subject_teacher.model.dart';
+import 'package:attendance_app/src/views/screens/profile/profile.dart';
 import 'package:attendance_app/src/views/screens/teacher/attendance/attendance_teacher.dart';
 import 'package:attendance_app/src/views/screens/teacher/bluetooth/bluetooth.dart';
 import 'package:attendance_app/src/views/screens/teacher/home/teacher.dart';
-import 'package:attendance_app/src/views/screens/teacher/profile/profile.dart';
 import 'package:attendance_app/src/views/widgets/widgets.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
@@ -40,7 +40,7 @@ final GoRoute teacherRoutes = GoRoute(
     ),
     GoRoute(
       path: "profile",
-      builder: (context, state) => const ProfileTeacher(),
+      builder: (context, state) => const Profile(),
     ),
     GoRoute(
       path: "bluetooth",
