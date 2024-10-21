@@ -61,7 +61,9 @@ class _StatsAndCalenderState extends State<StatsAndCalender> {
               );
       if (attendanceResponse.success) {
         setState(() {
-          attendanceList = attendanceResponse.data;
+          attendanceList = attendanceResponse.data
+              .where((day) => day.facultyPresent == true)
+              .toList();
           totalClasses =
               attendanceList.where((day) => day.facultyPresent == true).length;
           presentClasses = attendanceList
