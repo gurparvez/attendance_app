@@ -31,7 +31,7 @@ class User {
         );
       }
     } catch (e) {
-      throw Exception('$e');
+      throw Exception(e.toString().replaceAll("Exception: ", ""));
     }
   }
 

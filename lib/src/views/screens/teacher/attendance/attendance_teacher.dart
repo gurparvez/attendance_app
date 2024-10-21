@@ -61,7 +61,7 @@ class _AttendanceTeacherState extends State<AttendanceTeacher> {
       }
     } catch (e) {
       setState(() {
-        _responseError = "$e";
+        _responseError = e.toString().replaceAll("Exception: ", "");
         debugPrint(e.toString());
       });
     } finally {
@@ -88,7 +88,7 @@ class _AttendanceTeacherState extends State<AttendanceTeacher> {
       }
     } catch (e) {
       setState(() {
-        _responseErrorAttendance = "$e";
+        _responseErrorAttendance = e.toString().replaceAll("Exception: ", "");
         debugPrint(e.toString());
       });
     } finally {
@@ -115,7 +115,7 @@ class _AttendanceTeacherState extends State<AttendanceTeacher> {
       }
     } catch (e) {
       setState(() {
-        _responseErrorAttendance = "$e";
+        _responseErrorAttendance = e.toString().replaceAll("Exception: ", "");
         debugPrint(e.toString());
       });
     } finally {
@@ -151,7 +151,7 @@ class _AttendanceTeacherState extends State<AttendanceTeacher> {
       }
     } catch (e) {
       setState(() {
-        _responseErrorAttendance = "$e";
+        _responseErrorAttendance = e.toString().replaceAll("Exception: ", "");
       });
     } finally {
       setState(() {

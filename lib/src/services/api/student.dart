@@ -37,7 +37,7 @@ class Student {
         );
       }
     } catch (e) {
-      throw Exception('$e');
+      throw Exception(e.toString().replaceAll("Exception: ", ""));
     }
   }
 
@@ -67,7 +67,7 @@ class Student {
         );
       }
     } catch (e) {
-      throw Exception('$e');
+      throw Exception(e.toString().replaceAll("Exception: ", ""));
     }
   }
 
@@ -107,7 +107,7 @@ class Student {
         );
       }
     } catch (e) {
-      throw Exception('$e');
+      throw Exception(e.toString().replaceAll("Exception: ", ""));
     }
   }
 
@@ -148,7 +148,7 @@ class Student {
         );
       }
     } catch (e) {
-      throw Exception('$e');
+      throw Exception(e.toString().replaceAll("Exception: ", ""));
     }
   }
 
@@ -185,7 +185,7 @@ class Student {
         );
       }
     } catch (e) {
-      throw Exception("$e");
+      throw Exception(e.toString().replaceAll("Exception: ", ""));
     }
   }
 }

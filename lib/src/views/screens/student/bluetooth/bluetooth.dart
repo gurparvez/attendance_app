@@ -88,7 +88,7 @@ class _BluetoothState extends State<Bluetooth> {
       }
     } catch (e) {
       setState(() {
-        _responseErrorTeacherPresent = "Could not get teacher's attendance: $e";
+        _responseErrorTeacherPresent = e.toString().replaceAll("Exception: ", "");
         debugPrint(_responseErrorTeacherPresent);
       });
     } finally {
@@ -181,7 +181,7 @@ class _BluetoothState extends State<Bluetooth> {
       }
     } catch (e) {
       setState(() {
-        _responseErrorMarkingAttendance = "$e";
+        _responseErrorMarkingAttendance = e.toString().replaceAll("Exception: ", "");
         debugPrint(e.toString());
       });
     } finally {

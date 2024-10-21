@@ -61,9 +61,9 @@ class _LoginPageState extends State<LoginPage> {
           context.go("/teacher");
         }
       }
-    } catch (error) {
+    } catch (e) {
       setState(() {
-        _responseError = "$error";
+        _responseError = e.toString().replaceAll("Exception: ", "");
         debugPrint(_responseError);
       });
     } finally {

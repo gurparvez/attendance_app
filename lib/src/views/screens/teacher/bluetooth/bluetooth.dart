@@ -74,7 +74,7 @@ class _BluetoothState extends State<Bluetooth> {
       }
     } catch (e) {
       setState(() {
-        _responseError = "$e";
+        _responseError = e.toString().replaceAll("Exception: ", "");
         debugPrint(e.toString());
       });
       WidgetsBinding.instance.addPostFrameCallback((_) {

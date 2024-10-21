@@ -76,7 +76,7 @@ class _StatsAndCalenderState extends State<StatsAndCalender> {
       }
     } catch (e) {
       setState(() {
-        _responseError = "Could not get attendance: $e";
+        _responseError = e.toString().replaceAll("Exception: ", "");
         debugPrint(e.toString());
       });
     } finally {

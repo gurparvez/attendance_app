@@ -33,7 +33,7 @@ class _SubjectsListState extends State<SubjectsList> {
       }
     } catch (e) {
       setState(() {
-        _responseError = "Could not get subjects: $e";
+        _responseError = e.toString().replaceAll("Exception: ", "");
         debugPrint(e.toString());
       });
     } finally {
