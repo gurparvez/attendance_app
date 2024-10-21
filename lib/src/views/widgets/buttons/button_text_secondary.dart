@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 
-@immutable
-class ButtonTextSecondary extends StatelessWidget {
+class ButtonTextSecondary extends StatefulWidget {
   final String text;
   final bool isLoading;
-
   final VoidCallback onPressed;
 
   const ButtonTextSecondary({
@@ -15,37 +13,40 @@ class ButtonTextSecondary extends StatelessWidget {
   });
 
   @override
+  State<ButtonTextSecondary> createState() => _ButtonTextSecondaryState();
+}
+
+class _ButtonTextSecondaryState extends State<ButtonTextSecondary> {
+  @override
   Widget build(BuildContext context) {
+    debugPrint("loading state in button: ${widget.isLoading}");
     final colorScheme = Theme.of(context).colorScheme;
 
     return ElevatedButton(
-      onPressed: onPressed,
+      onPressed: widget.onPressed,
       style: ElevatedButton.styleFrom(
-        backgroundColor: isLoading
-            ? Theme.of(context).colorScheme.secondaryContainer.withOpacity(0.7)
-            : Theme.of(context).colorScheme.secondaryContainer,
+        backgroundColor: widget.isLoading
+            ? colorScheme.secondaryContainer.withOpacity(0.7)
+            : colorScheme.secondaryContainer,
         foregroundColor: colorScheme.onSecondaryContainer,
         padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
         ),
       ),
-      child: isLoading
-          ? SizedBox(
-              width: 24,
-              height: 24,
-              child: CircularProgressIndicator(
-                strokeWidth: 2.0,
-                color: colorScheme.onSecondaryContainer,
-              ),
-            )
+      child: widget.isLoading
+          ? const SizedBox(
+        width: 24,
+        height: 24,
+        child: CircularProgressIndicator(strokeWidth: 2.0),
+      )
           : Text(
-              text,
-              style: TextStyle(
-                color: colorScheme.onSecondaryContainer,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+        widget.text,
+        style: TextStyle(
+          color: colorScheme.onSecondaryContainer,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
     );
   }
 }

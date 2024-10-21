@@ -25,10 +25,10 @@ class AttendanceTeacher extends StatefulWidget {
 class _AttendanceTeacherState extends State<AttendanceTeacher> {
   bool _isLoading = false;
   String _responseError = "";
-  bool _isLoadingAttendance = false;
   String _responseErrorAttendance = "";
   DateTime date = DateTime.now();
   StudentsAttendanceModel studentsList = StudentsAttendanceModel();
+  Map<String, bool> studentAttendanceLoading = <String, bool>{};
 
   @override
   void initState() {
@@ -55,6 +55,16 @@ class _AttendanceTeacherState extends State<AttendanceTeacher> {
       ApiResponse<List<StudentsAttendanceModel>> studentsListResponse =
           await Api().teacher.getSubjectAttendance(widget.subjectId, date);
       if (studentsListResponse.success) {
+        final students = studentsListResponse.data[0].students!;
+        setState(() {
+          for (var student in students) {
+            // If the student is not already in the map, set their initial attendance to false
+            studentAttendanceLoading.putIfAbsent(
+              student.user!.sId!,
+              () => false,
+            );
+          }
+        });
         setState(() {
           studentsList = studentsListResponse.data[0];
         });
@@ -72,63 +82,79 @@ class _AttendanceTeacherState extends State<AttendanceTeacher> {
   }
 
   void _markAttendance(
-    DateTime date,
-    String subjectId,
-    String studentId,
-  ) async {
+      DateTime date,
+      String subjectId,
+      String studentId,
+      ) async {
     setState(() {
-      _isLoadingAttendance = true;
+      // Create a new map instance to trigger the state update properly
+      studentAttendanceLoading = {
+        ...studentAttendanceLoading,
+        studentId: true,
+      };
+      debugPrint("Updated loading state: $studentId -> ${studentAttendanceLoading[studentId]}");
     });
+
     try {
       debugPrint("marking attendance...");
       ApiResponse<ChangeAttendanceModel> response =
-          await Api().teacher.markAttendance(subjectId, date, studentId);
+      await Api().teacher.markAttendance(subjectId, date, studentId);
       if (response.success) {
-        _getUpdatedStudentAttendance(studentId, date);
+        await _getUpdatedStudentAttendance(studentId, date);
       }
     } catch (e) {
       setState(() {
         _responseErrorAttendance = e.toString().replaceAll("Exception: ", "");
-        debugPrint(e.toString());
       });
     } finally {
       setState(() {
-        _isLoadingAttendance = false;
+        studentAttendanceLoading = {
+          ...studentAttendanceLoading,
+          studentId: false,
+        };
       });
     }
   }
 
   void _unMarkAttendance(
-    DateTime date,
-    String subjectId,
-    String studentId,
-  ) async {
+      DateTime date,
+      String subjectId,
+      String studentId,
+      ) async {
     setState(() {
-      _isLoadingAttendance = true;
+      studentAttendanceLoading = {
+        ...studentAttendanceLoading,
+        studentId: true,
+      };
+      debugPrint("Updated loading state: $studentId -> ${studentAttendanceLoading[studentId]}");
     });
+
     try {
-      debugPrint("marking attendance...");
+      debugPrint("unmarking attendance...");
       ApiResponse<ChangeAttendanceModel> response =
-          await Api().teacher.unmarkAttendance(subjectId, date, studentId);
+      await Api().teacher.unmarkAttendance(subjectId, date, studentId);
       if (response.success) {
-        _getUpdatedStudentAttendance(studentId, date);
+        await _getUpdatedStudentAttendance(studentId, date);
       }
     } catch (e) {
       setState(() {
         _responseErrorAttendance = e.toString().replaceAll("Exception: ", "");
-        debugPrint(e.toString());
       });
     } finally {
       setState(() {
-        _isLoadingAttendance = false;
+        studentAttendanceLoading = {
+          ...studentAttendanceLoading,
+          studentId: false,
+        };
       });
     }
   }
 
-  void _getUpdatedStudentAttendance(String studentId, DateTime date) async {
-    setState(() {
-      _isLoadingAttendance = true;
-    });
+  Future<void> _getUpdatedStudentAttendance(
+      String studentId, DateTime date) async {
+    // setState(() {
+    //   studentAttendanceLoading[studentId] = true;
+    // });
     try {
       ApiResponse<List<StudentsAttendanceModel>> response =
           await Api().teacher.getSubjectAttendance(widget.subjectId, date);
@@ -153,11 +179,12 @@ class _AttendanceTeacherState extends State<AttendanceTeacher> {
       setState(() {
         _responseErrorAttendance = e.toString().replaceAll("Exception: ", "");
       });
-    } finally {
-      setState(() {
-        _isLoadingAttendance = false;
-      });
     }
+    // finally {
+    //   setState(() {
+    //     studentAttendanceLoading[studentId] = false;
+    //   });
+    // }
   }
 
   @override
@@ -214,7 +241,7 @@ class _AttendanceTeacherState extends State<AttendanceTeacher> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 DatePicker(selectedDate: date, onDateSelected: _selectDate),
-                if (studentsList.students != null && studentsList.students!.isNotEmpty) ...[
+                if ((studentsList.students ?? []).isNotEmpty) ...[
                   Expanded(
                     child: cardStat(
                       "Total",
@@ -248,14 +275,15 @@ class _AttendanceTeacherState extends State<AttendanceTeacher> {
                   ? const Center(
                       child: CircularProgressIndicator(),
                     )
-                  : _responseError != ""
+                  : _responseError.isNotEmpty
                       ? Center(child: Text(_responseError))
                       : ListView.builder(
                           itemCount: studentsList.students!.length,
                           itemBuilder: (context, index) {
                             final student = studentsList.students![index];
+
                             return ListTile(
-                              leading: studentsList.students![index].present!
+                              leading: student.present!
                                   ? const Icon(
                                       Icons.check,
                                       color: Colors.green,
@@ -269,7 +297,8 @@ class _AttendanceTeacherState extends State<AttendanceTeacher> {
                               trailing: student.present!
                                   ? ButtonTextSecondary(
                                       text: "UnMark",
-                                      isLoading: _isLoadingAttendance,
+                                      isLoading: studentAttendanceLoading[
+                                              student.user!.sId]!,
                                       onPressed: () {
                                         _unMarkAttendance(
                                           date,
@@ -280,7 +309,8 @@ class _AttendanceTeacherState extends State<AttendanceTeacher> {
                                     )
                                   : ButtonTextPrimary(
                                       text: "Mark",
-                                      isLoading: _isLoadingAttendance,
+                                      isLoading: studentAttendanceLoading[
+                                              student.user!.sId]!,
                                       onPressed: () {
                                         _markAttendance(
                                           date,
