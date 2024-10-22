@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:attendance_app/src/models/api_response.dart';
+import 'package:attendance_app/src/models/department.model.dart';
 import 'package:attendance_app/src/models/user.model.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -35,6 +37,39 @@ class User {
     }
   }
 
+  Future<ApiResponse<DepartmentModel>> getDepartmentFromId(String departmentId) async {
+
+    Map<String, String> body = <String, String>{
+      "id": departmentId,
+    };
+
+    try {
+      debugPrint("getting department...");
+      final response = await http.post(
+        Uri.parse("$url/department"),
+        headers: <String, String>{
+          "Content-Type": "application/json; charset=UTF-8",
+        },
+        body: jsonEncode(body),
+      );
+
+      final responseData = jsonDecode(response.body.toString());
+
+      if (responseData["success"]) {
+        return ApiResponse<DepartmentModel>.fromJson(
+          responseData,
+              (data) => DepartmentModel.fromJson(data),
+        );
+      } else {
+        throw Exception(
+          "${responseData["message"]}",
+        );
+      }
+    } catch (e) {
+      throw Exception(e.toString().replaceAll("Exception: ", ""));
+    }
+  }
+
   void logout() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     try {
@@ -43,4 +78,6 @@ class User {
       throw Exception("Something went wrong, unable to logout!");
     }
   }
+
+
 }

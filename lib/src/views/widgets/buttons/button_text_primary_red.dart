@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
 @immutable
-class ButtonTextPrimary extends StatelessWidget {
+class ButtonTextPrimaryRed extends StatelessWidget {
   final String text;
   final bool isLoading;
 
   final VoidCallback onPressed;
 
-  const ButtonTextPrimary({
+  const ButtonTextPrimaryRed({
     super.key,
     required this.text,
     required this.onPressed,
@@ -22,11 +22,15 @@ class ButtonTextPrimary extends StatelessWidget {
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
         backgroundColor: isLoading
-            ? colorScheme.primary.withOpacity(0.7)
-            : colorScheme.primary,
+            ? Color.fromRGBO(255, 186, 186, 0.7)
+            : colorScheme.surface,
         padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
+          side: BorderSide(
+            color: Color.fromRGBO(202, 18, 18, 1.0), // Set the border color
+            width: 2.0, // Set the border width
+          ),
         ),
       ),
       child: isLoading
@@ -41,7 +45,8 @@ class ButtonTextPrimary extends StatelessWidget {
           : Text(
               text,
               style: TextStyle(
-                  color: colorScheme.surface, fontWeight: FontWeight.bold),
+                  color: Color.fromRGBO(202, 18, 18, 1.0),
+                  fontWeight: FontWeight.bold),
             ),
     );
   }
