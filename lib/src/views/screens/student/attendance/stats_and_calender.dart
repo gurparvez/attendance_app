@@ -27,7 +27,7 @@ class _StatsAndCalenderState extends State<StatsAndCalender> {
   List<SubjectAttendanceModel> attendanceList = [];
   int totalClasses = 0;
   int presentClasses = 0;
-  int absentClasses = 0;
+  // int absentClasses = 0;
   double percentage = 0.0;
 
   @override
@@ -69,7 +69,7 @@ class _StatsAndCalenderState extends State<StatsAndCalender> {
           presentClasses = attendanceList
               .where((day) => day.facultyPresent == true && day.present == true)
               .length;
-          absentClasses = totalClasses - presentClasses;
+          // absentClasses = totalClasses - presentClasses;
           percentage =
               totalClasses <= 0 ? 0 : (presentClasses / totalClasses) * 100;
         });
@@ -99,7 +99,7 @@ class _StatsAndCalenderState extends State<StatsAndCalender> {
                     children: [
                       Expanded(child: cardStat("Classes", "$totalClasses")),
                       Expanded(child: cardStat("Present", "$presentClasses")),
-                      Expanded(child: cardStat("Absent", "$absentClasses")),
+                      // Expanded(child: cardStat("Absent", "$absentClasses")),
                       Expanded(
                         child: cardStat(
                           "Attendance",

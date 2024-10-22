@@ -14,9 +14,9 @@ class StatsAndCalenderLoader extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  _buildShimmerCard('Classes', '10'),
-                  _buildShimmerCard('Present', '8'),
-                  _buildShimmerCard('Absent', '2'),
+                  _buildShimmerCard('Classes', '8'),
+                  _buildShimmerCard('Present', '6'),
+                  // _buildShimmerCard('Absent', '2'),
                   _buildShimmerCard('Attendance', '80%'),
                 ],
               ),
@@ -37,7 +37,7 @@ class StatsAndCalenderLoader extends StatelessWidget {
       children: [
         Container(
           height: 60,
-          width: 60,
+          width: 100,
           color: Colors.grey[300],
         ),
       ],
