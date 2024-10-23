@@ -12,7 +12,6 @@ Widget cardStat(String title, String value) {
             title,
             style: const TextStyle(
               fontSize: 14,
-              fontWeight: FontWeight.bold,
             ),
           ),
           const SizedBox(height: 4),
@@ -20,7 +19,6 @@ Widget cardStat(String title, String value) {
             value,
             style: const TextStyle(
               fontSize: 18,
-              fontWeight: FontWeight.w500,
             ),
           ),
         ],
