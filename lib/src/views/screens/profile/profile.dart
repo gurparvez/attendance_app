@@ -6,8 +6,11 @@ import 'package:attendance_app/src/services/api/api.dart';
 import 'package:attendance_app/src/utils/format_name.dart';
 import 'package:attendance_app/src/views/widgets/buttons/button_text_primary_red.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Profile extends ConsumerStatefulWidget {
   const Profile({super.key});
@@ -25,6 +28,7 @@ class _ProfileState extends ConsumerState<Profile> {
   String department = "";
   bool _loadingDepartment = true;
   String _responseErrorDepartment = "";
+  String _responseErrorLogout = "";
   bool _hasFetchedDepartment = false;
 
   @override
@@ -57,6 +61,16 @@ class _ProfileState extends ConsumerState<Profile> {
     }
   }
 
+  void Logout() async {
+    try {
+      Api().user.logout();
+      context.go("/");
+    } catch (e) {
+      _responseErrorLogout = e.toString().replaceAll("Exception: ", "");
+      debugPrint(e.toString());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(userProvider);
@@ -73,6 +87,17 @@ class _ProfileState extends ConsumerState<Profile> {
         body: Center(
           child: Text(_responseErrorDepartment),
         ),
+      );
+    }
+
+    if (_responseErrorLogout.isNotEmpty) {
+      Fluttertoast.showToast(
+        msg: _responseErrorLogout,
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0,
       );
     }
 
@@ -169,7 +194,9 @@ class _ProfileState extends ConsumerState<Profile> {
             Row(
               children: [
                 SizedBox(width: 20,),
-                ButtonTextPrimaryRed(text: "Logout", onPressed: () {}),
+                ButtonTextPrimaryRed(text: "Logout", onPressed: () {
+                  Logout();
+                }),
               ],
             )
           ],

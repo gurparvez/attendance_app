@@ -73,11 +73,11 @@ class User {
   void logout() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     try {
-      await prefs.remove("token");
+      bool success = await prefs.remove("token");
+      debugPrint("Logout success: $success");
     } catch (e) {
-      throw Exception("Something went wrong, unable to logout!");
+      throw Exception("Something went wrong!");
     }
   }
-
 
 }
