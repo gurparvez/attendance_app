@@ -68,6 +68,14 @@ class _ProfileState extends ConsumerState<Profile> {
           true; // Mark as fetched to avoid repeated API calls
     }
 
+    if (_responseErrorDepartment.isNotEmpty) {
+      return Scaffold(
+        body: Center(
+          child: Text(_responseErrorDepartment),
+        ),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.primary,
@@ -167,16 +175,6 @@ class _ProfileState extends ConsumerState<Profile> {
           ],
         ),
       ),
-    );
-  }
-
-  Widget buildProfileOption(IconData icon, String label,
-      {bool showTrailingIcon = false}) {
-    return ListTile(
-      leading: Icon(icon, color: Theme.of(context).colorScheme.primary),
-      title: Text(label, style: TextStyle(fontSize: 16)),
-      trailing:
-          showTrailingIcon ? Icon(Icons.refresh, color: Colors.grey) : null,
     );
   }
 }
