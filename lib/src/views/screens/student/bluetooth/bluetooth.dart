@@ -6,10 +6,12 @@ import 'package:attendance_app/src/models/mark_student_attendance.model.dart';
 import 'package:attendance_app/src/models/subject.student.model.dart';
 import 'package:attendance_app/src/services/api/api.dart';
 import 'package:attendance_app/src/views/widgets/widgets.dart';
+import 'package:attendance_app/test/bluetoothSpeed.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nearby_connections/nearby_connections.dart';
-import 'package:permission_handler/permission_handler.dart' as permissionHandler;
+import 'package:permission_handler/permission_handler.dart'
+    as permissionHandler;
 import 'package:location/location.dart' as locationHandler;
 
 class Bluetooth extends StatefulWidget {
@@ -88,7 +90,8 @@ class _BluetoothState extends State<Bluetooth> {
       }
     } catch (e) {
       setState(() {
-        _responseErrorTeacherPresent = e.toString().replaceAll("Exception: ", "");
+        _responseErrorTeacherPresent =
+            e.toString().replaceAll("Exception: ", "");
         debugPrint(_responseErrorTeacherPresent);
       });
     } finally {
@@ -112,7 +115,7 @@ class _BluetoothState extends State<Bluetooth> {
 
     // Request all required permissions using the permission handler alias
     Map<permissionHandler.Permission, permissionHandler.PermissionStatus>
-    statuses = await [
+        statuses = await [
       permissionHandler.Permission.bluetooth,
       permissionHandler.Permission.bluetoothScan,
       permissionHandler.Permission.bluetoothAdvertise,
@@ -147,6 +150,12 @@ class _BluetoothState extends State<Bluetooth> {
           final ids = name.split(':');
           if (subjectId == ids[0] && teacherId == ids[1]) {
             debugPrint('Matched Ids: ${ids[0]}, ${ids[1]}');
+            bluetoothSpeed(
+              teacherId,
+              subjectId,
+              DateTime.now(),
+              60 - _timeRemaining,
+            );
             _markAttendance();
           }
         },
@@ -181,7 +190,8 @@ class _BluetoothState extends State<Bluetooth> {
       }
     } catch (e) {
       setState(() {
-        _responseErrorMarkingAttendance = e.toString().replaceAll("Exception: ", "");
+        _responseErrorMarkingAttendance =
+            e.toString().replaceAll("Exception: ", "");
         debugPrint(e.toString());
       });
     } finally {

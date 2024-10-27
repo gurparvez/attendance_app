@@ -1,16 +1,13 @@
 import 'package:attendance_app/src/models/api_response.dart';
 import 'package:attendance_app/src/models/department.model.dart';
 import 'package:attendance_app/src/providers/user_provider.dart';
-import 'package:attendance_app/src/routes/routes.dart';
 import 'package:attendance_app/src/services/api/api.dart';
 import 'package:attendance_app/src/utils/format_name.dart';
 import 'package:attendance_app/src/views/widgets/buttons/button_text_primary_red.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class Profile extends ConsumerStatefulWidget {
   const Profile({super.key});
@@ -21,9 +18,6 @@ class Profile extends ConsumerStatefulWidget {
 
 class _ProfileState extends ConsumerState<Profile> {
   String avatarUrl = "";
-  bool _isPasswordVisible = false;
-  bool _isNewPasswordVisible = false;
-  TextEditingController _newPasswordController = TextEditingController();
   String password = "";
   String department = "";
   bool _loadingDepartment = true;
@@ -161,42 +155,42 @@ class _ProfileState extends ConsumerState<Profile> {
             _loadingDepartment
                 ? const Center(child: CircularProgressIndicator())
                 : Column(
-                  children: [
-                    ListTile(
-                      leading: Icon(Icons.badge_outlined),
-                      title: Text(user.user!.auid!),
-                    ),
-                    ListTile(
-                      leading: Icon(Icons.apartment_outlined),
-                      title: Text(formatName(department)),
-                    ),
-                    ListTile(
-                      leading: Icon(Icons.supervised_user_circle_outlined),
-                      title: Text(formatName(user.user!.role!)),
-                    ),
-                    ListTile(
-                      leading: Icon(Icons.email),
-                      title: Text(user.user!.email!),
-                    ),
-                    ListTile(
-                      leading: Icon(Icons.lock),
-                      title: Text("*******"),
-                      trailing: Icon(
-                        Icons.refresh,
+                    children: [
+                      ListTile(
+                        leading: Icon(Icons.badge_outlined),
+                        title: Text(user.user!.auid!),
                       ),
-                      onTap: () {
-
-                      },
-                    ),
-                    const SizedBox(height: 20),
-                  ],
-                ),
+                      ListTile(
+                        leading: Icon(Icons.apartment_outlined),
+                        title: Text(formatName(department)),
+                      ),
+                      ListTile(
+                        leading: Icon(Icons.supervised_user_circle_outlined),
+                        title: Text(formatName(user.user!.role!)),
+                      ),
+                      ListTile(
+                        leading: Icon(Icons.email),
+                        title: Text(user.user!.email!),
+                      ),
+                      ListTile(
+                        leading: Icon(Icons.vpn_key),
+                        title: Text("*******"),
+                        trailing: const Icon(Icons.lock_reset),
+                        onTap: () {},
+                      ),
+                      const SizedBox(height: 20),
+                    ],
+                  ),
             Row(
               children: [
-                SizedBox(width: 20,),
-                ButtonTextPrimaryRed(text: "Logout", onPressed: () {
-                  Logout();
-                }),
+                SizedBox(
+                  width: 20,
+                ),
+                ButtonTextPrimaryRed(
+                    text: "Logout",
+                    onPressed: () {
+                      Logout();
+                    }),
               ],
             )
           ],
