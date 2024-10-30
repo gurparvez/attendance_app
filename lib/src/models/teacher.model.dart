@@ -17,9 +17,9 @@ class TeacherModel {
   set faculty(Faculty? faculty) => _faculty = faculty;
 
   TeacherModel.fromJson(Map<String, dynamic> json) {
-    _user = json['user'] != null ? new User.fromJson(json['user']) : null;
+    _user = json['user'] != null ? User.fromJson(json['user']) : null;
     _faculty =
-    json['faculty'] != null ? new Faculty.fromJson(json['faculty']) : null;
+    json['faculty'] != null ? Faculty.fromJson(json['faculty']) : null;
   }
 
   Map<String, dynamic> toJson() {

@@ -48,7 +48,7 @@ class IsTeacherPresentModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['_id'] = _sId;
     data['facultyId'] = _facultyId;
     data['subjectId'] = _subjectId;

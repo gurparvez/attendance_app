@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class SubjectsList extends StatefulWidget {
+  const SubjectsList({super.key});
+
   @override
   State<SubjectsList> createState() => _SubjectsListState();
 }

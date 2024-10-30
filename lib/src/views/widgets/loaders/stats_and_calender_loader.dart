@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
 class StatsAndCalenderLoader extends StatelessWidget {
+  const StatsAndCalenderLoader({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -21,7 +23,7 @@ class StatsAndCalenderLoader extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Shimmer.fromColors(
               baseColor: Colors.grey[300]!,
               highlightColor: Colors.grey[100]!,

@@ -25,11 +25,11 @@ class FullScreenSpinner extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                CircularProgressIndicator(),
-                SizedBox(height: 20),
+                const CircularProgressIndicator(),
+                const SizedBox(height: 20),
                 Text(
                   message,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w400,
                   ),

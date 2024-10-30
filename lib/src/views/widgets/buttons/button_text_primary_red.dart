@@ -22,12 +22,12 @@ class ButtonTextPrimaryRed extends StatelessWidget {
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
         backgroundColor: isLoading
-            ? Color.fromRGBO(255, 186, 186, 0.7)
+            ? const Color.fromRGBO(255, 186, 186, 0.7)
             : colorScheme.surface,
         padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
-          side: BorderSide(
+          side: const BorderSide(
             color: Color.fromRGBO(202, 18, 18, 1.0), // Set the border color
             width: 2.0, // Set the border width
           ),
@@ -44,7 +44,7 @@ class ButtonTextPrimaryRed extends StatelessWidget {
             )
           : Text(
               text,
-              style: TextStyle(
+              style: const TextStyle(
                   color: Color.fromRGBO(202, 18, 18, 1.0),
                   fontWeight: FontWeight.bold),
             ),

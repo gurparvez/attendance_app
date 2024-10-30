@@ -12,19 +12,19 @@ class DepartmentModel {
         String? updatedAt,
         int? iV}) {
     if (sId != null) {
-      this._sId = sId;
+      _sId = sId;
     }
     if (name != null) {
-      this._name = name;
+      _name = name;
     }
     if (createdAt != null) {
-      this._createdAt = createdAt;
+      _createdAt = createdAt;
     }
     if (updatedAt != null) {
-      this._updatedAt = updatedAt;
+      _updatedAt = updatedAt;
     }
     if (iV != null) {
-      this._iV = iV;
+      _iV = iV;
     }
   }
 
@@ -48,12 +48,12 @@ class DepartmentModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['_id'] = this._sId;
-    data['name'] = this._name;
-    data['createdAt'] = this._createdAt;
-    data['updatedAt'] = this._updatedAt;
-    data['__v'] = this._iV;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['_id'] = _sId;
+    data['name'] = _name;
+    data['createdAt'] = _createdAt;
+    data['updatedAt'] = _updatedAt;
+    data['__v'] = _iV;
     return data;
   }
 }

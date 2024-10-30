@@ -55,8 +55,7 @@ import 'package:intl/intl.dart';
 class MonthPicker extends StatefulWidget {
   final Function(String) onMonthSelected;
 
-  const MonthPicker({Key? key, required this.onMonthSelected})
-      : super(key: key);
+  const MonthPicker({super.key, required this.onMonthSelected});
 
   @override
   _MonthPickerState createState() => _MonthPickerState();
