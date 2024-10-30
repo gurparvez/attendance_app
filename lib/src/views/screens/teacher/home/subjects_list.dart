@@ -49,25 +49,29 @@ class _SubjectsListState extends State<SubjectsList> {
 
   @override
   Widget build(BuildContext context) {
+    if (_isLoading) {
+      return const CardShimmerList();
+    }
+
+    if (_responseError.isNotEmpty) {
+      return Text(_responseError);
+    }
+
     if (subjects.isEmpty) {
       return const Center(child: Text("No subjects available."));
     }
 
-    return _isLoading
-        ? const CardShimmerList()
-        : _responseError != ""
-            ? Text(_responseError)
-            : ListView.builder(
-                itemCount: subjects.length,
-                itemBuilder: (context, index) {
-                  return CardSubject(
-                    title: subjects[index].course![0].name!.toUpperCase(),
-                    subtitle: "Subject: ${subjects[index].name!}",
-                    onPressed: () {
-                      context.go("/teacher/attendance/${subjects[index].sId}", extra: subjects[index]);
-                    },
-                  );
-                },
-              );
+    return ListView.builder(
+      itemCount: subjects.length,
+      itemBuilder: (context, index) {
+        return CardSubject(
+          title: subjects[index].course![0].name!.toUpperCase(),
+          subtitle: "Subject: ${subjects[index].name!}",
+          onPressed: () {
+            context.go("/teacher/attendance/${subjects[index].sId}", extra: subjects[index]);
+          },
+        );
+      },
+    );
   }
 }
