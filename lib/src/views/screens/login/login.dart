@@ -124,8 +124,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                               hintText: 'Enter User ID',
                               prefixIcon: const Icon(Icons.person_outline),
                               border: border,
-                              enabledBorder: _responseError != "" ? borderRed : border,
-                              focusedBorder: _responseError != "" ? borderRed : border,
+                              enabledBorder:
+                                  _responseError != "" ? borderRed : border,
+                              focusedBorder:
+                                  _responseError != "" ? borderRed : border,
                             ),
                           ),
                           const SizedBox(height: 16),
@@ -137,9 +139,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return "Please enter your password";
-                              }
-                              if (value.length < 7) {
-                                return "Password should be at least 7 characters long";
                               }
                               return null;
                             },
@@ -154,8 +153,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                     : const Icon(Icons.visibility),
                               ),
                               border: border,
-                              enabledBorder: _responseError != "" ? borderRed : border,
-                              focusedBorder: _responseError != "" ? borderRed : border,
+                              enabledBorder:
+                                  _responseError != "" ? borderRed : border,
+                              focusedBorder:
+                                  _responseError != "" ? borderRed : border,
                             ),
                           ),
                           SizedBox(

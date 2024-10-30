@@ -3,6 +3,7 @@ import 'package:attendance_app/src/models/department.model.dart';
 import 'package:attendance_app/src/providers/user_provider.dart';
 import 'package:attendance_app/src/services/api/api.dart';
 import 'package:attendance_app/src/utils/format_name.dart';
+import 'package:attendance_app/src/views/screens/profile/reset_password.dart';
 import 'package:attendance_app/src/views/widgets/buttons/button_text_primary_red.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -55,7 +56,7 @@ class _ProfileState extends ConsumerState<Profile> {
     }
   }
 
-  void Logout() async {
+  void logout() async {
     try {
       Api().user.logout();
       context.go("/");
@@ -157,40 +158,61 @@ class _ProfileState extends ConsumerState<Profile> {
                 : Column(
                     children: [
                       ListTile(
-                        leading: Icon(Icons.badge_outlined),
+                        leading: const Icon(Icons.badge_outlined),
                         title: Text(user.user!.auid!),
                       ),
                       ListTile(
-                        leading: Icon(Icons.apartment_outlined),
+                        leading: const Icon(Icons.apartment_outlined),
                         title: Text(formatName(department)),
                       ),
                       ListTile(
-                        leading: Icon(Icons.supervised_user_circle_outlined),
+                        leading:
+                            const Icon(Icons.supervised_user_circle_outlined),
                         title: Text(formatName(user.user!.role!)),
                       ),
                       ListTile(
-                        leading: Icon(Icons.email),
+                        leading: const Icon(Icons.email),
                         title: Text(user.user!.email!),
                       ),
                       ListTile(
-                        leading: Icon(Icons.vpn_key),
-                        title: Text("*******"),
-                        trailing: const Icon(Icons.lock_reset),
-                        onTap: () {},
+                        leading: const Icon(Icons.vpn_key),
+                        title: const Text("*******"),
+                        trailing: TextButton(
+                          onPressed: () {
+                            showModalBottomSheet(
+                              context: context,
+                              isScrollControlled:
+                                  true, // For full-height sheet on keyboard popup
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.vertical(
+                                    top: Radius.circular(20)),
+                              ),
+                              builder: (context) => Padding(
+                                padding: EdgeInsets.only(
+                                  bottom:
+                                      MediaQuery.of(context).viewInsets.bottom,
+                                ),
+                                child: const ResetPassword(),
+                              ),
+                            );
+                          },
+                          child: const Text("Reset Password"),
+                        ),
                       ),
                       const SizedBox(height: 20),
                     ],
                   ),
             Row(
               children: [
-                SizedBox(
+                const SizedBox(
                   width: 20,
                 ),
                 ButtonTextPrimaryRed(
-                    text: "Logout",
-                    onPressed: () {
-                      Logout();
-                    }),
+                  text: "Logout",
+                  onPressed: () {
+                    logout();
+                  },
+                ),
               ],
             )
           ],

@@ -70,6 +70,40 @@ class User {
     }
   }
 
+  Future<bool> resetPassword(String oldPass, String newPass) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String token = prefs.getString("token") ?? "";
+
+    Map<String, String> body = <String, String>{
+      "oldPassword": oldPass,
+      "newPassword": newPass,
+    };
+
+    try {
+      debugPrint("resetting password...");
+      final response = await http.post(
+        Uri.parse("$url/user/update-password"),
+        headers: <String, String>{
+          "Authorization": "Bearer $token",
+          "Content-Type": "application/json; charset=UTF-8",
+        },
+        body: jsonEncode(body),
+      );
+
+      final responseData = jsonDecode(response.body.toString());
+
+      if (responseData["success"]) {
+        return true;
+      } else {
+        throw Exception(
+          "${responseData["message"]}",
+        );
+      }
+    } catch (e) {
+      throw Exception(e.toString().replaceAll("Exception: ", ""));
+    }
+  }
+
   void logout() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     try {
