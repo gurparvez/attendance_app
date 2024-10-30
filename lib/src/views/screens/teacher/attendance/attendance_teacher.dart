@@ -3,6 +3,7 @@ import 'package:attendance_app/src/models/change_attendance.model.dart';
 import 'package:attendance_app/src/models/students_attendance.model.dart';
 import 'package:attendance_app/src/models/subject_teacher.model.dart';
 import 'package:attendance_app/src/services/api/api.dart';
+import 'package:attendance_app/src/utils/format_name.dart';
 import 'package:attendance_app/src/views/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -292,7 +293,7 @@ class _AttendanceTeacherState extends State<AttendanceTeacher> {
                                       Icons.close,
                                       color: Colors.red,
                                     ),
-                              title: Text(student.user!.name!),
+                              title: Text(formatName(student.user!.name!)),
                               subtitle: Text(student.user!.auid!),
                               trailing: student.present!
                                   ? ButtonTextSecondary(
