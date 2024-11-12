@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:intl/intl.dart';
-import 'package:mac_address/mac_address.dart';
+// import 'package:mac_address/mac_address.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -14,7 +14,8 @@ void bluetoothSpeed(
   int time,
 ) async {
   debugPrint("sending test data...");
-  String macAddress = await GetMac.macAddress;
+  // String macAddress = await GetMac.macAddress;
+  String macAddress = "mac address";
   SharedPreferences prefs = await SharedPreferences.getInstance();
   final String token = prefs.getString("token") ?? "";
 
