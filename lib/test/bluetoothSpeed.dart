@@ -24,7 +24,7 @@ void bluetoothSpeed(
     "subjectId": subjectId,
     "macAddress": macAddress,
     "date": DateFormat('yyyy-MM-dd').format(date),
-    "time": time,
+    "time": time.toString(),
   };
 
   final String url = dotenv.env["SERVER_URL"] ?? "";
@@ -36,6 +36,7 @@ void bluetoothSpeed(
       Uri.parse("$url/test/test-data"),
       headers: <String, String>{
         "Authorization": "Bearer $token",
+        "Content-Type": "application/json; charset=UTF-8",
       },
       body: jsonEncode(body),
     );
