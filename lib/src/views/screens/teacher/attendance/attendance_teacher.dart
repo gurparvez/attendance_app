@@ -83,23 +83,24 @@ class _AttendanceTeacherState extends State<AttendanceTeacher> {
   }
 
   void _markAttendance(
-      DateTime date,
-      String subjectId,
-      String studentId,
-      ) async {
+    DateTime date,
+    String subjectId,
+    String studentId,
+  ) async {
     setState(() {
       // Create a new map instance to trigger the state update properly
       studentAttendanceLoading = {
         ...studentAttendanceLoading,
         studentId: true,
       };
-      debugPrint("Updated loading state: $studentId -> ${studentAttendanceLoading[studentId]}");
+      debugPrint(
+          "Updated loading state: $studentId -> ${studentAttendanceLoading[studentId]}");
     });
 
     try {
       debugPrint("marking attendance...");
       ApiResponse<ChangeAttendanceModel> response =
-      await Api().teacher.markAttendance(subjectId, date, studentId);
+          await Api().teacher.markAttendance(subjectId, date, studentId);
       if (response.success) {
         await _getUpdatedStudentAttendance(studentId, date);
       }
@@ -118,22 +119,23 @@ class _AttendanceTeacherState extends State<AttendanceTeacher> {
   }
 
   void _unMarkAttendance(
-      DateTime date,
-      String subjectId,
-      String studentId,
-      ) async {
+    DateTime date,
+    String subjectId,
+    String studentId,
+  ) async {
     setState(() {
       studentAttendanceLoading = {
         ...studentAttendanceLoading,
         studentId: true,
       };
-      debugPrint("Updated loading state: $studentId -> ${studentAttendanceLoading[studentId]}");
+      debugPrint(
+          "Updated loading state: $studentId -> ${studentAttendanceLoading[studentId]}");
     });
 
     try {
       debugPrint("unmarking attendance...");
       ApiResponse<ChangeAttendanceModel> response =
-      await Api().teacher.unmarkAttendance(subjectId, date, studentId);
+          await Api().teacher.unmarkAttendance(subjectId, date, studentId);
       if (response.success) {
         await _getUpdatedStudentAttendance(studentId, date);
       }
@@ -203,6 +205,15 @@ class _AttendanceTeacherState extends State<AttendanceTeacher> {
     return Scaffold(
       appBar: AppBar(
         actions: <Widget>[
+          IconButton(
+            onPressed: () {
+              GoRouter.of(context).push(
+                '/teacher/downloadCSV/${widget.subjectId}',
+                extra: widget.subject,
+              );
+            },
+            icon: const Icon(Icons.sim_card_download_outlined),
+          ),
           IconButton(
             onPressed: () {
               context.go("/teacher/profile");
@@ -299,7 +310,7 @@ class _AttendanceTeacherState extends State<AttendanceTeacher> {
                                   ? ButtonTextSecondary(
                                       text: "UnMark",
                                       isLoading: studentAttendanceLoading[
-                                              student.user!.sId]!,
+                                          student.user!.sId]!,
                                       onPressed: () {
                                         _unMarkAttendance(
                                           date,
@@ -311,7 +322,7 @@ class _AttendanceTeacherState extends State<AttendanceTeacher> {
                                   : ButtonTextPrimary(
                                       text: "Mark",
                                       isLoading: studentAttendanceLoading[
-                                              student.user!.sId]!,
+                                          student.user!.sId]!,
                                       onPressed: () {
                                         _markAttendance(
                                           date,

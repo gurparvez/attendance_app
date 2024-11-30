@@ -1,6 +1,7 @@
 import 'package:attendance_app/src/models/subject_teacher.model.dart';
 import 'package:attendance_app/src/views/screens/profile/profile.dart';
 import 'package:attendance_app/src/views/screens/teacher/attendance/attendance_teacher.dart';
+import 'package:attendance_app/src/views/screens/teacher/attendance/download_attendance.dart';
 import 'package:attendance_app/src/views/screens/teacher/bluetooth/bluetooth.dart';
 import 'package:attendance_app/src/views/screens/teacher/home/teacher.dart';
 import 'package:attendance_app/src/views/widgets/widgets.dart';
@@ -12,7 +13,7 @@ final GoRoute teacherRoutes = GoRoute(
   builder: (context, state) => const HomeTeacher(),
   routes: [
     GoRoute(
-      path: 'attendance/:subjectId', // Nested route
+      path: 'attendance/:subjectId',
       pageBuilder: (context, state) {
         final id = state.pathParameters['subjectId']!;
         final subject = state.extra as SubjectTeacherModel;
@@ -27,7 +28,7 @@ final GoRoute teacherRoutes = GoRoute(
             const curve = Curves.easeInOut;
 
             var tween =
-            Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+                Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
             var offsetAnimation = animation.drive(tween);
 
             return SlideTransition(
@@ -36,6 +37,14 @@ final GoRoute teacherRoutes = GoRoute(
             );
           },
         );
+      },
+    ),
+    GoRoute(
+      path: 'downloadCSV/:subjectId',
+      builder: (context, state) {
+        final id = state.pathParameters['subjectId']!;
+        final subject = state.extra as SubjectTeacherModel;
+        return DownloadAttendance(subjectId: id, subject: subject,);
       },
     ),
     GoRoute(
@@ -56,7 +65,7 @@ final GoRoute teacherRoutes = GoRoute(
             const curve = Curves.easeInOut;
 
             var tween =
-            Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+                Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
             var offsetAnimation = animation.drive(tween);
 
             return SlideTransition(
