@@ -2,10 +2,12 @@ import 'dart:convert';
 import 'package:attendance_app/src/models/api_response.dart';
 import 'package:attendance_app/src/models/department.model.dart';
 import 'package:attendance_app/src/models/user.model.dart';
+import 'package:attendance_app/src/providers/user_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class User {
   final String url = dotenv.env["SERVER_URL"] ?? "";
@@ -37,8 +39,9 @@ class User {
     }
   }
 
-  Future<ApiResponse<DepartmentModel>> getDepartmentFromId(String departmentId) async {
-
+  Future<ApiResponse<DepartmentModel>> getDepartmentFromId(
+    String departmentId,
+  ) async {
     Map<String, String> body = <String, String>{
       "id": departmentId,
     };
@@ -58,7 +61,7 @@ class User {
       if (responseData["success"]) {
         return ApiResponse<DepartmentModel>.fromJson(
           responseData,
-              (data) => DepartmentModel.fromJson(data),
+          (data) => DepartmentModel.fromJson(data),
         );
       } else {
         throw Exception(
@@ -71,8 +74,8 @@ class User {
   }
 
   Future<bool> resetPassword(String oldPass, String newPass) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String token = prefs.getString("token") ?? "";
+    const storage = FlutterSecureStorage();
+    final token = await storage.read(key: "token");
 
     Map<String, String> body = <String, String>{
       "oldPassword": oldPass,
@@ -104,14 +107,15 @@ class User {
     }
   }
 
-  void logout() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
+  void logout(WidgetRef ref) async {
+    const storage = FlutterSecureStorage();
+
     try {
-      bool success = await prefs.remove("token");
-      debugPrint("Logout success: $success");
+      await storage.delete(key: "token");
+      ref.read(userProvider.notifier).clearUser();
+      debugPrint("Logout success");
     } catch (e) {
       throw Exception("Something went wrong!");
     }
   }
-
 }

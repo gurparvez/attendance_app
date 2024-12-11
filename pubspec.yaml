@@ -24,6 +24,7 @@ dependencies:
   location: ^6.0.2
   fluttertoast: ^8.2.8
   flutter_launcher_icons: ^0.14.1
+  flutter_secure_storage: ^9.2.2
 #  mac_address: ^1.0.0
 
 dev_dependencies:

@@ -10,14 +10,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class Teacher {
   final String url = dotenv.env["SERVER_URL"] ?? "";
 
   Future<ApiResponse<TeacherModel>> getTeacher() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String token = prefs.getString("token") ?? "";
+    const storage = FlutterSecureStorage();
+    final token = await storage.read(key: "token");
     try {
       final response = await http.get(
         Uri.parse("$url/faculty"),
@@ -44,8 +44,8 @@ class Teacher {
   }
 
   Future<ApiResponse<List<SubjectTeacherModel>>> getSubjects() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String token = prefs.getString("token") ?? "";
+    const storage = FlutterSecureStorage();
+    final token = await storage.read(key: "token");
     try {
       final response = await http.post(
         Uri.parse("$url/subject/faculty"),
@@ -77,8 +77,8 @@ class Teacher {
     String subjectId,
     DateTime date,
   ) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String token = prefs.getString("token") ?? "";
+    const storage = FlutterSecureStorage();
+    final token = await storage.read(key: "token");
 
     Map<String, dynamic> body = {
       "subjectId": subjectId,
@@ -122,8 +122,8 @@ class Teacher {
     DateTime date,
     String studentId,
   ) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String token = prefs.getString("token") ?? "";
+    const storage = FlutterSecureStorage();
+    final token = await storage.read(key: "token");
 
     Map<String, dynamic> body = {
       "studentId": studentId,
@@ -164,8 +164,8 @@ class Teacher {
     DateTime date,
     String studentId,
   ) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String token = prefs.getString("token") ?? "";
+    const storage = FlutterSecureStorage();
+    final token = await storage.read(key: "token");
 
     Map<String, dynamic> body = {
       "studentId": studentId,
@@ -206,8 +206,8 @@ class Teacher {
     String facultyId,
     String subject,
   ) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String token = prefs.getString("token") ?? "";
+    const storage = FlutterSecureStorage();
+    final token = await storage.read(key: "token");
 
     Map<String, dynamic> body = {
       "date": DateFormat('yyyy-MM-dd').format(date),

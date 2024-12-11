@@ -1,6 +1,7 @@
 import 'package:attendance_app/src/models/api_response.dart';
 import 'package:attendance_app/src/models/student.model.dart';
 import 'package:attendance_app/src/providers/student_provider.dart';
+import 'package:attendance_app/src/providers/user_provider.dart';
 import 'package:attendance_app/src/services/api/api.dart';
 import 'package:attendance_app/src/views/screens/student/home/subjects_list.dart';
 import 'package:attendance_app/src/views/widgets/widgets.dart';
@@ -17,7 +18,7 @@ class StudentHome extends ConsumerStatefulWidget {
 }
 
 class _StudentHomeState extends ConsumerState<StudentHome> {
-  bool isLoading = true;
+  bool isLoading = false;
 
   Future<void> getStudent() async {
     try {
@@ -45,12 +46,19 @@ class _StudentHomeState extends ConsumerState<StudentHome> {
   @override
   void initState() {
     super.initState();
-    getStudent();
+    // getStudent();
   }
 
   @override
   Widget build(BuildContext context) {
-    final student = ref.watch(studentProvider);
+    final user = ref.watch(userProvider);
+    String studentName = "User";
+
+    if (user is StudentUser) {
+      studentName = user.student.user?.name ?? "User";
+    } else {
+      studentName = "User";
+    }
 
     return isLoading
         ? const Scaffold(
@@ -78,7 +86,7 @@ class _StudentHomeState extends ConsumerState<StudentHome> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  HomeTitle(name: student!.user!.name!),
+                  HomeTitle(name: studentName),
                   const Expanded(
                     child: SubjectsList(),
                   ),

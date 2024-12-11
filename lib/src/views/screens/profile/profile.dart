@@ -18,6 +18,11 @@ class Profile extends ConsumerStatefulWidget {
 }
 
 class _ProfileState extends ConsumerState<Profile> {
+  String name = "";
+  String role = "";
+  String auid = "";
+  String email = "";
+
   String avatarUrl = "";
   String password = "";
   String department = "";
@@ -58,7 +63,7 @@ class _ProfileState extends ConsumerState<Profile> {
 
   void logout() async {
     try {
-      Api().user.logout();
+      Api().user.logout(ref);
       context.go("/");
     } catch (e) {
       _responseErrorLogout = e.toString().replaceAll("Exception: ", "");
@@ -68,13 +73,24 @@ class _ProfileState extends ConsumerState<Profile> {
 
   @override
   Widget build(BuildContext context) {
-    final user = ref.watch(userProvider);
+    final appUser = ref.watch(userProvider);
 
-    if (user != null && !_hasFetchedDepartment) {
-      String departmentId = user.user!.departmentId!;
+    if (appUser != null && !_hasFetchedDepartment) {
+      String departmentId = appUser.user.departmentId!;
       getDepartment(departmentId);
-      _hasFetchedDepartment =
-          true; // Mark as fetched to avoid repeated API calls
+      _hasFetchedDepartment = true;
+    }
+
+    if (appUser is StudentUser) {
+      name = appUser.student.user?.name ?? "User";
+      role = appUser.student.user?.role ?? "User";
+      auid = appUser.student.user?.auid ?? "000000000";
+      email = appUser.student.user?.email ?? "user@auts.ac.in";
+    } else if (appUser is TeacherUser) {
+      name = appUser.teacher.user?.name ?? "User";
+      role = appUser.teacher.user?.role ?? "User";
+      auid = appUser.teacher.user?.auid ?? "000000000";
+      email = appUser.teacher.user?.email ?? "user@auts.ac.in";
     }
 
     if (_responseErrorDepartment.isNotEmpty) {
@@ -138,7 +154,7 @@ class _ProfileState extends ConsumerState<Profile> {
                       ),
                       const SizedBox(height: 10),
                       Text(
-                        formatName(user!.user!.name!),
+                        formatName(name),
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 22,
@@ -159,7 +175,7 @@ class _ProfileState extends ConsumerState<Profile> {
                     children: [
                       ListTile(
                         leading: const Icon(Icons.badge_outlined),
-                        title: Text(user.user!.auid!),
+                        title: Text(auid),
                       ),
                       ListTile(
                         leading: const Icon(Icons.apartment_outlined),
@@ -168,11 +184,11 @@ class _ProfileState extends ConsumerState<Profile> {
                       ListTile(
                         leading:
                             const Icon(Icons.supervised_user_circle_outlined),
-                        title: Text(formatName(user.user!.role!)),
+                        title: Text(formatName(role)),
                       ),
                       ListTile(
                         leading: const Icon(Icons.email),
-                        title: Text(user.user!.email!),
+                        title: Text(email),
                       ),
                       ListTile(
                         leading: const Icon(Icons.vpn_key),

@@ -1,6 +1,7 @@
 import 'package:attendance_app/src/models/api_response.dart';
 import 'package:attendance_app/src/models/teacher.model.dart';
 import 'package:attendance_app/src/providers/teacher_provider.dart';
+import 'package:attendance_app/src/providers/user_provider.dart';
 import 'package:attendance_app/src/services/api/api.dart';
 import 'package:attendance_app/src/views/screens/teacher/home/subjects_list.dart';
 import 'package:attendance_app/src/views/widgets/widgets.dart';
@@ -16,7 +17,7 @@ class HomeTeacher extends ConsumerStatefulWidget {
 }
 
 class _HomeTeacherState extends ConsumerState<HomeTeacher> {
-  bool isLoading = true;
+  bool isLoading = false;
 
   Future<void> getTeacher() async {
     try {
@@ -44,12 +45,12 @@ class _HomeTeacherState extends ConsumerState<HomeTeacher> {
   @override
   void initState() {
     super.initState();
-    getTeacher();
+    // getTeacher();
   }
 
   @override
   Widget build(BuildContext context) {
-    final teacher = ref.watch(teacherProvider);
+    final teacher = ref.watch(userProvider);
 
     return isLoading
         ? const Scaffold(
@@ -78,7 +79,7 @@ class _HomeTeacherState extends ConsumerState<HomeTeacher> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   HomeTitle(name: teacher!.user!.name!),
-                  Expanded(
+                  const Expanded(
                     child: SubjectsList(),
                   ),
                 ],

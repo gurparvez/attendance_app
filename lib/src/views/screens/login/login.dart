@@ -1,11 +1,10 @@
 import 'package:attendance_app/src/models/api_response.dart';
 import 'package:attendance_app/src/models/user.model.dart';
-import 'package:attendance_app/src/providers/user_provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:attendance_app/src/services/api/api.dart';
 import 'package:attendance_app/src/views/widgets/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
@@ -51,19 +50,12 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       ApiResponse<UserModel> response = await Api().user.login(formData);
 
       if (response.success) {
-        final prefs = await SharedPreferences.getInstance();
-        await prefs.setString("token", response.data.accessToken!);
+        const storage = FlutterSecureStorage();
+        await storage.write(key: "token", value: response.data.accessToken);
+        await storage.write(key: "user_role", value: response.data.user!.role); 
 
-        ref.read(userProvider.notifier).setUser(response.data);
-
-        final role = response.data.user!.role;
-        if (role == "student") {
-          if (!mounted) return;
-          context.go("/student");
-        } else if (role == "faculty") {
-          if (!mounted) return;
-          context.go("/teacher");
-        }
+        if (!mounted) return;
+        context.go("/");
       }
     } catch (e) {
       setState(() {
