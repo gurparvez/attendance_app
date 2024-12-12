@@ -159,7 +159,7 @@ class Teacher {
     }
   }
 
-  Future<ApiResponse<ChangeAttendanceModel>> unmarkAttendance(
+  Future<ApiResponse<ChangeAttendanceModel>> unMarkAttendance(
     String subjectId,
     DateTime date,
     String studentId,

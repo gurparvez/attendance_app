@@ -30,6 +30,7 @@ class _AttendanceTeacherState extends State<AttendanceTeacher> {
   DateTime date = DateTime.now();
   StudentsAttendanceModel studentsList = StudentsAttendanceModel();
   Map<String, bool> studentAttendanceLoading = <String, bool>{};
+  String _searchQuery = "";
 
   @override
   void initState() {
@@ -133,9 +134,9 @@ class _AttendanceTeacherState extends State<AttendanceTeacher> {
     });
 
     try {
-      debugPrint("unmarking attendance...");
+      debugPrint("unMarking attendance...");
       ApiResponse<ChangeAttendanceModel> response =
-          await Api().teacher.unmarkAttendance(subjectId, date, studentId);
+          await Api().teacher.unMarkAttendance(subjectId, date, studentId);
       if (response.success) {
         await _getUpdatedStudentAttendance(studentId, date);
       }
@@ -188,6 +189,20 @@ class _AttendanceTeacherState extends State<AttendanceTeacher> {
     //     studentAttendanceLoading[studentId] = false;
     //   });
     // }
+  }
+
+  List<Students> _getFilteredStudents() {
+    if (_searchQuery.isEmpty) {
+      return studentsList.students ?? [];
+    }
+
+    return studentsList.students?.where((student) {
+      final name = student.user?.name?.toLowerCase() ?? '';
+      final auid = student.user?.auid?.toLowerCase() ?? '';
+      final query = _searchQuery.toLowerCase();
+
+      return name.contains(query) || auid.contains(query);
+    }).toList() ?? [];
   }
 
   @override
@@ -246,7 +261,11 @@ class _AttendanceTeacherState extends State<AttendanceTeacher> {
             SearchBar(
               leading: const Icon(Icons.search),
               hintText: "Search (name or auid)",
-              onChanged: (value) {},
+              onChanged: (value) {
+                setState(() {
+                  _searchQuery = value;
+                });
+              },
             ),
             const SizedBox(height: 20),
             Row(
@@ -257,13 +276,13 @@ class _AttendanceTeacherState extends State<AttendanceTeacher> {
                   Expanded(
                     child: cardStat(
                       "Total",
-                      studentsList.students!.length.toString(),
+                      _getFilteredStudents().length.toString(),
                     ),
                   ),
                   Expanded(
                     child: cardStat(
                       "Present",
-                      studentsList.students!
+                      _getFilteredStudents()
                           .where((student) => student.present!)
                           .length
                           .toString(),
@@ -272,7 +291,7 @@ class _AttendanceTeacherState extends State<AttendanceTeacher> {
                   Expanded(
                     child: cardStat(
                       "Absent",
-                      studentsList.students!
+                      _getFilteredStudents()
                           .where((student) => !student.present!)
                           .length
                           .toString(),
@@ -290,9 +309,9 @@ class _AttendanceTeacherState extends State<AttendanceTeacher> {
                   : _responseError.isNotEmpty
                       ? Center(child: Text(_responseError))
                       : ListView.builder(
-                          itemCount: studentsList.students!.length,
+                          itemCount: _getFilteredStudents().length,
                           itemBuilder: (context, index) {
-                            final student = studentsList.students![index];
+                            final student = _getFilteredStudents()[index];
 
                             return ListTile(
                               leading: student.present!
