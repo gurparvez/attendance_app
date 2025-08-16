@@ -89,7 +89,7 @@ class _StatsAndCalenderState extends State<StatsAndCalender> {
   @override
   Widget build(BuildContext context) {
     return _isLoading
-        ? StatsAndCalenderLoader()
+        ? const StatsAndCalenderLoader()
         : _responseError != ""
             ? Center(child: Text(_responseError))
             : Column(
